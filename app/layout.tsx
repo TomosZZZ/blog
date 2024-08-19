@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Work_Sans as WorkSans } from 'next/font/google'
 import './globals.css'
-
+import Navbar from './navbar'
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -20,7 +20,7 @@ export default function RootLayout({
 				className={`
 					min-h-screen bg-background  antialiased bg-black
 					${workSans.className}`}>
-				
+				<Navbar />
 				<main>{children}</main>
 			</body>
 		</html>

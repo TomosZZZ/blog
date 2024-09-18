@@ -7,6 +7,7 @@ const config = {
 		'./components/**/*.{ts,tsx}',
 		'./app/**/*.{ts,tsx}',
 		'./src/**/*.{ts,tsx}',
+		'./features/**/*.{ts,tsx}',
 	],
 	prefix: '',
 	theme: {
@@ -17,7 +18,6 @@ const config = {
 				'2xl': '1400px',
 			},
 		},
-		
 
 		extend: {
 			keyframes: {

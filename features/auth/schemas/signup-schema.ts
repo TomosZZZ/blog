@@ -1,6 +1,6 @@
 import { string, object } from "zod";
 
-export const signUpFormSchema = object({
+export const signUpSchema = object({
   username: string({ required_error: "Username is required" }).min(3, {
     message: "Username must be at least 3 characters long",
   }),

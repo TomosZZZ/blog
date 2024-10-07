@@ -23,26 +23,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const { success, data } = loginSchema.safeParse(credentials);
 
         if (!success || !data) {
-          return null;
+          throw new Error("Invalid credentials");
         }
 
         const { email, password } = data;
         const userRepository = new UserRepository();
 
-        if (!success || !data) {
-          return null;
-        }
-
         const user = await userRepository.getUserByEmail(email);
 
         if (!user || !user.password) {
-          return null;
+          throw new Error("Invalid email");
         }
 
         const passwordsMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordsMatch) {
-          return null;
+          throw new Error("Invalid password");
         }
 
         return user;

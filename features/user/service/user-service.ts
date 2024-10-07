@@ -1,9 +1,14 @@
-import { signUpSchema } from "@/features/auth/schemas";
+import { loginSchema, signUpSchema } from "@/features/auth/schemas";
 import { userRepository } from "../repository";
 import bcrypt from "bcryptjs";
-import { SignupDto } from "@/features/auth";
+import { LoginDto, signIn, SignupDto } from "@/features/auth";
+import { AuthError } from "next-auth";
 
 export class UserService {
+  private async validatePassword(password: string, hashedPassword: string) {
+    return bcrypt.compare(password, hashedPassword);
+  }
+
   async getUserByEmail(email: string) {
     return userRepository.getUserByEmail(email);
   }
@@ -14,10 +19,7 @@ export class UserService {
   async createUser(data: SignupDto) {
     const { email, username, password } = data;
     const { success: dataIsValid, error } = signUpSchema.safeParse(data);
-    console.log(error?.errors);
-    error?.errors?.forEach((err) => {
-      console.log(err.message);
-    });
+
     if (!dataIsValid) {
       const errorMessageArr = error?.errors?.map((err) => err.message);
       const errorMessage = errorMessageArr.join(", ") ?? "Invalid data";
@@ -40,6 +42,43 @@ export class UserService {
       username,
       password: hashedPassword,
     });
+  }
+  async login(data: LoginDto) {
+    try {
+      const { success } = loginSchema.safeParse(data);
+
+      if (!success) {
+        throw new Error("Invalid data");
+      }
+      const { email, password } = data;
+      const user = await this.getUserByEmail(email);
+
+      if (!user || !user.password) {
+        throw new Error("User not found");
+      }
+      const passwordsMatch = await this.validatePassword(
+        password,
+        user.password
+      );
+      if (!passwordsMatch) {
+        throw new Error("Invalid password");
+      }
+
+      return signIn("credentials", {
+        email,
+        password,
+        redirectTo: "/blog",
+        redirect: true,
+      });
+    } catch (error) {
+      if (error instanceof AuthError) {
+        throw new Error(error.message);
+      } else if (error instanceof Error) {
+        throw new Error(error.message);
+      } else {
+        throw new Error("An unknown error occurred");
+      }
+    }
   }
 }
 

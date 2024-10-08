@@ -28,9 +28,7 @@ export class UserService {
         const errorMessage = errorMessageArr.join(", ") ?? "Invalid data";
         throw new Error(errorMessage);
       }
-
       const existingUser = await this.getUserByEmail(data.email);
-
       if (existingUser) {
         throw new Error("User already exists");
       }
@@ -48,10 +46,10 @@ export class UserService {
     } catch (error) {
       if (error instanceof AuthError) {
         throw new Error(error.message);
-      } else if (error instanceof Error) {
-        throw new Error(error.message);
       } else if (INSTANCE_OF_PRISMA_ERROR(error)) {
         throw new Error("There was an error with the database");
+      } else if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error("An unknown error occurred");
       }
@@ -87,10 +85,10 @@ export class UserService {
     } catch (error) {
       if (error instanceof AuthError) {
         throw new Error(error.message);
-      } else if (error instanceof Error) {
-        throw new Error(error.message);
       } else if (INSTANCE_OF_PRISMA_ERROR(error)) {
         throw new Error("There was an error with the database");
+      } else if (error instanceof Error) {
+        throw new Error(error.message);
       } else {
         throw new Error("An unknown error occurred");
       }

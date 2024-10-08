@@ -3,6 +3,8 @@ import { userRepository } from "../repository";
 import bcrypt from "bcryptjs";
 import { LoginDto, signIn, SignupDto } from "@/features/auth";
 import { AuthError } from "next-auth";
+import { Prisma } from "@prisma/client";
+import { INSTANCE_OF_PRISMA_ERROR } from "@/constants";
 
 export class UserService {
   private async validatePassword(password: string, hashedPassword: string) {
@@ -17,31 +19,43 @@ export class UserService {
   }
 
   async createUser(data: SignupDto) {
-    const { email, username, password } = data;
-    const { success: dataIsValid, error } = signUpSchema.safeParse(data);
+    try {
+      const { email, username, password } = data;
+      const { success: dataIsValid, error } = signUpSchema.safeParse(data);
 
-    if (!dataIsValid) {
-      const errorMessageArr = error?.errors?.map((err) => err.message);
-      const errorMessage = errorMessageArr.join(", ") ?? "Invalid data";
-      throw new Error(errorMessage);
+      if (!dataIsValid) {
+        const errorMessageArr = error?.errors?.map((err) => err.message);
+        const errorMessage = errorMessageArr.join(", ") ?? "Invalid data";
+        throw new Error(errorMessage);
+      }
+
+      const existingUser = await this.getUserByEmail(data.email);
+
+      if (existingUser) {
+        throw new Error("User already exists");
+      }
+      const existingUsername = await this.getUserByUsername(data.username);
+      if (existingUsername) {
+        throw new Error("Username is already taken. Find another one");
+      }
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      return userRepository.createUser({
+        email,
+        username,
+        password: hashedPassword,
+      });
+    } catch (error) {
+      if (error instanceof AuthError) {
+        throw new Error(error.message);
+      } else if (error instanceof Error) {
+        throw new Error(error.message);
+      } else if (INSTANCE_OF_PRISMA_ERROR(error)) {
+        throw new Error("There was an error with the database");
+      } else {
+        throw new Error("An unknown error occurred");
+      }
     }
-
-    const existingUser = await this.getUserByEmail(data.email);
-
-    if (existingUser) {
-      throw new Error("User already exists");
-    }
-    const existingUsername = await this.getUserByUsername(data.username);
-    if (existingUsername) {
-      throw new Error("Username is already taken. Find another one");
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    return userRepository.createUser({
-      email,
-      username,
-      password: hashedPassword,
-    });
   }
   async login(data: LoginDto) {
     try {
@@ -75,6 +89,8 @@ export class UserService {
         throw new Error(error.message);
       } else if (error instanceof Error) {
         throw new Error(error.message);
+      } else if (INSTANCE_OF_PRISMA_ERROR(error)) {
+        throw new Error("There was an error with the database");
       } else {
         throw new Error("An unknown error occurred");
       }

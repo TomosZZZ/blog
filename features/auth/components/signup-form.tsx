@@ -18,17 +18,10 @@ import { Button } from "@/components/ui/button";
 import { SignupDto } from "../dto";
 import { FormMessage } from "./form-message";
 import Link from "next/link";
-
-interface FormStatus {
-  message: string;
-  status: "error" | "success" | "idle" | "loading";
-}
+import { useRegister } from "../api";
 
 const SignupForm = () => {
-  const [formStatus, setFormStatus] = useState<FormStatus>({
-    message: "",
-    status: "idle",
-  });
+  const [message, setMessage] = useState("");
   const form = useForm<SignupDto>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -38,35 +31,17 @@ const SignupForm = () => {
     },
   });
 
+  const { mutate, isPending, isError, isSuccess } = useRegister();
+
   const submitHandler = async (data: SignupDto) => {
-    try {
-      setFormStatus({ message: "", status: "loading" });
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const resData = await res.json();
-
-      if (!res.ok) {
-        setFormStatus({ message: resData.message, status: "error" });
-        return;
-      }
-      setFormStatus({ message: resData.message, status: "success" });
-      form.reset();
-    } catch (error) {
-      if (error instanceof Error) {
-        setFormStatus({ message: error.message, status: "error" });
-      } else {
-        setFormStatus({
-          message: "An unknown error occurred",
-          status: "error",
-        });
-      }
-    }
+    mutate(data, {
+      onSuccess: (data) => {
+        setMessage(data.message);
+      },
+      onError: (error) => {
+        setMessage(error.message);
+      },
+    });
   };
 
   return (
@@ -132,15 +107,11 @@ const SignupForm = () => {
               </FormItem>
             )}
           />
-          {formStatus.status === "error" && (
-            <FormMessage message={formStatus.message} type="error" />
-          )}
-          {formStatus.status === "success" && (
-            <FormMessage message={formStatus.message} type="success" />
-          )}
+          {isError && <FormMessage message={message} type="error" />}
+          {isSuccess && <FormMessage message={message} type="success" />}
 
           <Button
-            disabled={formStatus.status === "loading"}
+            disabled={isPending}
             type="submit"
             className="bg-violet-700 text-xl hover:bg-violet-900"
           >

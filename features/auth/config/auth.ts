@@ -5,8 +5,9 @@ import { authConfig } from "./auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
+
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/auth/login",
   },
   ...authConfig,
 });

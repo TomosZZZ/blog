@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "./navbar";
 
 import QueryProvider from "@/components/providers/query-provider";
+import { auth } from "@/features";
+import { CustomSessionProvider } from "@/shared/components/custom-session-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -11,11 +13,13 @@ export const metadata: Metadata = {
 };
 
 const workSans = WorkSans({ subsets: ["latin"] });
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+  console.log(session);
   return (
     <html lang="en">
       <body
@@ -23,10 +27,12 @@ export default function RootLayout({
 					min-h-screen bg-background  antialiased bg-black
 					${workSans.className}`}
       >
-        <QueryProvider>
-          <Navbar />
-          <main>{children}</main>
-        </QueryProvider>
+        <CustomSessionProvider session={session}>
+          <QueryProvider>
+            <Navbar />
+            <main>{children}</main>
+          </QueryProvider>
+        </CustomSessionProvider>
       </body>
     </html>
   );

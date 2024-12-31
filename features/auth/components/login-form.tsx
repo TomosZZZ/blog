@@ -44,11 +44,13 @@ const LoginForm = () => {
 
   const submitHandler = async (data: LoginDto) => {
     setFormStatus({ message: "", status: "loading" });
+
     const res = await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false,
     });
+
     if (res?.error) {
       setFormStatus({ message: "Invalid credentials", status: "error" });
       return;

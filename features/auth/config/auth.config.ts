@@ -32,9 +32,25 @@ export const authConfig = {
         if (!passwordsMatch) {
           throw new Error("Invalid password");
         }
-
         return user;
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
+
+  callbacks: {
+    async session({ session, token }) {
+      session.user.id = token.id;
+
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user && user.id) {
+        token.id = user.id;
+      }
+      return token;
+    },
+  },
 } satisfies NextAuthConfig;

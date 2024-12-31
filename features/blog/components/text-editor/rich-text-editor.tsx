@@ -52,7 +52,7 @@ export const RichTextEditor = () => {
       },
     },
   });
-  console.log(editor?.getHTML());
+
   return (
     <div className="w-3/4   text-white ">
       <EditorMenu editor={editor} />

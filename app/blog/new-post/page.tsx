@@ -1,4 +1,4 @@
-import { RichTextEditor } from "@/features/blog/text-editor/rich-text-editor";
+import { RichTextEditor } from "@/features/blog/components/text-editor/rich-text-editor";
 
 const NewPostPage = () => {
   return (

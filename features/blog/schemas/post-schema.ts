@@ -1,6 +1,6 @@
 import { object, string } from "zod";
 
-export const createPostSchema = object({
+export const postSchema = object({
   title: string({ required_error: "Title is required" }).min(
     3,
     "Title must be at least 3 characters long"

@@ -6,6 +6,7 @@ import Navbar from "./navbar";
 import QueryProvider from "@/components/providers/query-provider";
 import { auth } from "@/features";
 import { CustomSessionProvider } from "@/shared/components/custom-session-provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,6 +31,7 @@ export default async function RootLayout({
           <QueryProvider>
             <Navbar />
             <main>{children}</main>
+            <Toaster />
           </QueryProvider>
         </CustomSessionProvider>
       </body>

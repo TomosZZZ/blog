@@ -1,15 +1,20 @@
 import NextAuth from "next-auth";
 import { authConfig } from "@/features/auth/config/auth.config";
-import { ADMIN_ROUTES, AUTH_ROUTES, DEFAULT_LOGIN_REDIRECT } from "./features";
+import {
+  ADMIN_ROUTES,
+  AUTH_ROUTES,
+  DEFAULT_LOGIN_REDIRECT,
+} from "./features/auth/config/routes";
 import { NextResponse } from "next/server";
-import { Role } from "@prisma/client";
 
 const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
   const { nextUrl, auth } = req;
   const isLoggedIn = !!auth;
-  const isAdmin = auth?.accessToken.role === Role.ADMIN;
+  const isAdmin = auth?.accessToken.role === "ADMIN";
+  console.log("Current path:", nextUrl.pathname);
+  console.log(["isLoggedIn", isLoggedIn, "isAdmin", isAdmin]);
 
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
   const isAdminRoute = ADMIN_ROUTES.includes(nextUrl.pathname);

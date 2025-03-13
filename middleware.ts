@@ -13,8 +13,6 @@ export default auth((req) => {
   const { nextUrl, auth } = req;
   const isLoggedIn = !!auth;
   const isAdmin = auth?.accessToken.role === "ADMIN";
-  console.log("Current path:", nextUrl.pathname);
-  console.log(["isLoggedIn", isLoggedIn, "isAdmin", isAdmin]);
 
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
   const isAdminRoute = ADMIN_ROUTES.includes(nextUrl.pathname);

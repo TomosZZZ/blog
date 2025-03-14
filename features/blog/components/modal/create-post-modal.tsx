@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import { convertImageToBase64 } from "@/app/utils";
 import { FaX } from "react-icons/fa6";
 import { useCreatePost } from "../../api/createPost/use-create-post";
+import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 interface CreatePostModalProps {
   content: string;
@@ -29,6 +31,8 @@ export const CreatePostModal = ({
   onCloseModal,
 }: CreatePostModalProps) => {
   const [fileName, setFileName] = useState<string | null>(null);
+  const { data: sessionData } = useSession();
+  const secret = process.env.AUTH_SECRET;
 
   const { mutate, isPending, isError, isSuccess } = useCreatePost();
 
@@ -61,15 +65,23 @@ export const CreatePostModal = ({
         thumbnail: thumbnailBase64Response.result,
         content,
       };
+      const token = sessionData?.accessToken;
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
 
-      mutate(post, {
-        onSuccess: (res) => {
-          console.log(res.message);
-        },
-        onError: (res) => {
-          console.log(res.message);
-        },
-      });
+      mutate(
+        { post, token },
+        {
+          onSuccess: (res) => {
+            toast.success("Post created successfully");
+            onCloseModal();
+          },
+          onError: (res) => {
+            setError("root", { message: res.message });
+          },
+        }
+      );
     } catch (error) {
       if (error instanceof Error) {
         setError("root", { message: error.message });

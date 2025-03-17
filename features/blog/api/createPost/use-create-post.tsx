@@ -14,10 +14,13 @@ export const useCreatePost = () => {
         body: JSON.stringify(post),
         headers: {
           "Content-Type": "application/json",
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       });
-
+      console.log(res);
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
       const data = await res.json();
       return data;
     },

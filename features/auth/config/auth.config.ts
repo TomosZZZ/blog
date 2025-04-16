@@ -47,6 +47,7 @@ export const authConfig = {
       if (!secret) {
         throw new Error("Auth secret is not defined");
       }
+
       session.accessToken = await new SignJWT(token)
         .setProtectedHeader({ alg: "HS256" })
         .setIssuedAt()

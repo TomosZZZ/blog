@@ -9,7 +9,7 @@ interface CreatePostMutationData {
 export const useCreatePost = () => {
   const createPostMutation = useMutation({
     mutationFn: async ({ post, token }: CreatePostMutationData) => {
-      const res = await fetch("http://localhost:8080/api/post/create", {
+      const res = await fetch("http://localhost:8080/api/posts/create", {
         method: "POST",
         body: JSON.stringify(post),
         headers: {

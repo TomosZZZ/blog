@@ -1,20 +1,26 @@
 import { useMutation } from "@tanstack/react-query";
-import { Post } from "../../types/post";
-import { useSession } from "next-auth/react";
+import { PostDTO } from "../../types/post";
+
+interface CreatePostMutationData {
+  post: PostDTO;
+  token: string;
+}
 
 export const useCreatePost = () => {
-  const { data: sessionData } = useSession();
-  console.log(sessionData);
   const createPostMutation = useMutation({
-    mutationFn: async (post: Post) => {
-      const res = await fetch("localhost:8080/api/post/create", {
+    mutationFn: async ({ post, token }: CreatePostMutationData) => {
+      const res = await fetch("http://localhost:8080/api/posts/create", {
         method: "POST",
         body: JSON.stringify(post),
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
-
+      console.log(res);
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
       const data = await res.json();
       return data;
     },

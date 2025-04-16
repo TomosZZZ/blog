@@ -1,7 +1,5 @@
-export interface Post {
-  id: string;
+export interface PostDTO {
   title: string;
   content: string;
-  createdAt: Date;
-  updatedAt: Date;
+  thumbnail: string;
 }

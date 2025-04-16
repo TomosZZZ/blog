@@ -1,16 +1,21 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import TextAlign from "@tiptap/extension-text-align";
 import Typography from "@tiptap/extension-typography";
 import { EditorMenu } from "./editor-menu";
 import { all, createLowlight } from "lowlight";
+import { useEffect } from "react";
 
 const lowlight = createLowlight(all);
 
-export const RichTextEditor = () => {
+interface RichTextEditorProps {
+  setEditor: React.Dispatch<React.SetStateAction<Editor | null>>;
+}
+
+export const RichTextEditor = ({ setEditor }: RichTextEditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -51,10 +56,14 @@ export const RichTextEditor = () => {
           "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none",
       },
     },
+    immediatelyRender: false,
   });
+  useEffect(() => {
+    setEditor(editor);
+  }, [editor]);
 
   return (
-    <div className="w-3/4   text-white ">
+    <div className="text-white">
       <EditorMenu editor={editor} />
       <EditorContent editor={editor} />
     </div>

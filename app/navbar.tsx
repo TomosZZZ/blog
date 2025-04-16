@@ -14,7 +14,7 @@ const Navbar = () => {
   const { data: session } = useSession();
 
   return (
-    <nav className=" h-[10%] py-5 sm:px-4 px-1 bg-black text-white border-b border-white border-opacity-10 flex flex-col gap-4 sm:flex-row items-center justify-between mb-5">
+    <nav className=" h-[10%] py-5 sm:px-4 px-1 bg-neutral-900 text-white border-b border-white border-opacity-10 flex flex-col gap-4 sm:flex-row items-center justify-between mb-5">
       <div className="md:w-1/2 sm:w-2/5 w-full flex justify-center">
         <Link href={"/"}>
           <h1

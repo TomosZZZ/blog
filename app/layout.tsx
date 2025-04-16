@@ -6,6 +6,7 @@ import Navbar from "./navbar";
 import QueryProvider from "@/components/providers/query-provider";
 import { auth } from "@/features";
 import { CustomSessionProvider } from "@/shared/components/custom-session-provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,18 +20,18 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-  console.log(session);
   return (
     <html lang="en">
       <body
         className={`
-					min-h-screen bg-background  antialiased bg-black
+					min-h-screen bg-background  antialiased bg-neutral-900
 					${workSans.className}`}
       >
         <CustomSessionProvider session={session}>
           <QueryProvider>
             <Navbar />
             <main>{children}</main>
+            <Toaster />
           </QueryProvider>
         </CustomSessionProvider>
       </body>

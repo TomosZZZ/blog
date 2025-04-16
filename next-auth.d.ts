@@ -8,7 +8,7 @@ declare module "next-auth/jwt" {
 }
 declare module "next-auth" {
   export interface Session extends DefaultSession {
-    accessToken: JWT;
+    accessToken: string;
   }
   export interface User extends User {
     role: Role;

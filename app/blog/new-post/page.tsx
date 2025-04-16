@@ -1,9 +1,9 @@
-import { RichTextEditor } from "@/features/blog/components/text-editor/rich-text-editor";
+import { NewPostEditor } from "@/features/blog/components/new-post/new-post-editor";
 
 const NewPostPage = () => {
   return (
     <div className="flex items-center justify-center  ">
-      <RichTextEditor />
+      <NewPostEditor />
     </div>
   );
 };

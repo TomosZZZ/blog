@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { convertImageToBase64 } from "@/app/utils";
 import { FaX } from "react-icons/fa6";
-import { useCreatePost } from "../../api/createPost/use-create-post";
+import { useCreatePost } from "../../api/create-post/use-create-post";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 

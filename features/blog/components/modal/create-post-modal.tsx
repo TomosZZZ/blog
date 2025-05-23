@@ -52,6 +52,9 @@ export const CreatePostModal = ({
 
   const onSubmit = async (values: z.infer<typeof createPostFormSchema>) => {
     try {
+      if (values.thumbnail.size > 1024 * 1024) {
+        throw new Error("Plik przekracza maksymalny rozmiar 1MB");
+      }
       const thumbnailBase64Response = await convertImageToBase64(
         values.thumbnail
       );

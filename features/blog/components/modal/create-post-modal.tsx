@@ -33,7 +33,7 @@ export const CreatePostModal = ({
   const [fileName, setFileName] = useState<string | null>(null);
   const { data: sessionData } = useSession();
 
-  const { mutate, isPending, isError, isSuccess } = useCreatePost();
+  const { mutate, isPending } = useCreatePost();
 
   const form = useForm<z.infer<typeof createPostFormSchema>>({
     resolver: zodResolver(createPostFormSchema),

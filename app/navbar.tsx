@@ -18,7 +18,7 @@ const Navbar = () => {
       <div className="md:w-1/2 sm:w-2/5 w-full flex justify-center">
         <Link href={"/"}>
           <h1
-            className={`text-3xl font-bold select-none cursor-pointer ${silkscreen.className}`}
+            className={`text-3xl font-bold select-none cursor-pointer ${silkscreen.className} `}
           >
             TomCode
           </h1>

@@ -3,9 +3,8 @@ import { useGetPosts } from "@/features/blog/api";
 import { extractTextFromTipTapJSON } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { PostCard } from "./post-card";
-import { Silkscreen } from "next/font/google";
 
-const silkscreen = Silkscreen({ weight: "700", subsets: ["latin"] });
+import { silkscreen } from "@/shared/fonts";
 
 export const Blog = () => {
   const { data, isLoading, isError } = useGetPosts();

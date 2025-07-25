@@ -9,6 +9,7 @@ export interface Post {
   title: string;
   content: string;
   thumbnail: string;
+  slug: string;
   createdAt: Date;
   updatedAt: Date;
 }

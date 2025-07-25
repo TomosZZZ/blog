@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 interface PostCardProps {
@@ -6,14 +7,16 @@ interface PostCardProps {
   description: string;
   thumbnail: string;
   date: string;
+  slug: string;
   className?: string;
 }
 
 export const PostCard = (props: PostCardProps) => {
-  const { title, description, thumbnail, date } = props;
+  const { title, description, thumbnail, slug, date } = props;
 
   return (
-    <div
+    <Link
+      href={`/blog/${slug}`}
       className={`h-[380px] basis-[80%] sm:basis-[43%] lg:basis-[28%] 2xl:basis-[20%] group hover:scale-[1.03] transition-transform duration-200 cursor-pointer overflow-hidden`}
     >
       <div className="w-full h-[55%] relative rounded-t-lg overflow-hidden">
@@ -35,6 +38,6 @@ export const PostCard = (props: PostCardProps) => {
           <p className="text-gray-600 text-xs sm:text-sm">{date}</p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

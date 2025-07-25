@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { PostCard } from "./post-card";
 
 import { silkscreen } from "@/shared/fonts";
+import Link from "next/link";
 
 export const Blog = () => {
   const { data, isLoading, isError } = useGetPosts();
@@ -44,11 +45,12 @@ export const Blog = () => {
           !areDescriptionsLoading &&
           data?.map((post, index) => (
             <PostCard
-              date={post.createdAt.toString().split("T")[0]}
               key={post.id}
+              date={post.createdAt.toString().split("T")[0]}
               title={post.title}
               description={postDescriptions[index]}
               thumbnail={post.thumbnail}
+              slug={post.slug}
             />
           ))}
       </div>

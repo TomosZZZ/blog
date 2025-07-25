@@ -15,40 +15,42 @@ interface RichTextEditorProps {
   setEditor: React.Dispatch<React.SetStateAction<Editor | null>>;
 }
 
+export const RichTextEditorExtensions = [
+  StarterKit.configure({
+    heading: {
+      levels: [1],
+      HTMLAttributes: {
+        class: "text-2xl font-bold",
+      },
+    },
+    bulletList: {
+      HTMLAttributes: {
+        class: "list-disc ml-4",
+      },
+    },
+    horizontalRule: {
+      HTMLAttributes: {
+        class: "my-6 border-b border-gray-200",
+      },
+    },
+  }),
+  TextAlign.configure({
+    types: ["heading", "paragraph"],
+  }),
+
+  CodeBlockLowlight.configure({
+    lowlight,
+    HTMLAttributes: {
+      class: "bg-gray-700 p-2 rounded-md language-javascript",
+    },
+    defaultLanguage: "typescript",
+  }),
+  Typography,
+];
+
 export const RichTextEditor = ({ setEditor }: RichTextEditorProps) => {
   const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        heading: {
-          levels: [1],
-          HTMLAttributes: {
-            class: "text-2xl font-bold",
-          },
-        },
-        bulletList: {
-          HTMLAttributes: {
-            class: "list-disc ml-4",
-          },
-        },
-        horizontalRule: {
-          HTMLAttributes: {
-            class: "my-6 border-b border-gray-200",
-          },
-        },
-      }),
-      TextAlign.configure({
-        types: ["heading", "paragraph"],
-      }),
-
-      CodeBlockLowlight.configure({
-        lowlight,
-        HTMLAttributes: {
-          class: "bg-gray-700 p-2 rounded-md language-javascript",
-        },
-        defaultLanguage: "typescript",
-      }),
-      Typography,
-    ],
+    extensions: RichTextEditorExtensions,
     content: "<p>Hello World! 🌎️</p>",
     editorProps: {
       attributes: {
@@ -60,7 +62,7 @@ export const RichTextEditor = ({ setEditor }: RichTextEditorProps) => {
   });
   useEffect(() => {
     setEditor(editor);
-  }, [editor]);
+  }, [editor, setEditor]);
 
   return (
     <div className="text-white">

@@ -1,14 +1,12 @@
 "use client";
 import React from "react";
 
-import { Silkscreen } from "next/font/google";
+import { silkscreen } from "@/shared/fonts";
 import Link from "next/link";
 import { NAVBAR_LINKS } from "@/constants";
 
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-
-const silkscreen = Silkscreen({ weight: "700", subsets: ["latin"] });
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -18,7 +16,7 @@ const Navbar = () => {
       <div className="md:w-1/2 sm:w-2/5 w-full flex justify-center">
         <Link href={"/"}>
           <h1
-            className={`text-3xl font-bold select-none cursor-pointer ${silkscreen.className}`}
+            className={`text-3xl font-bold select-none cursor-pointer ${silkscreen.className} `}
           >
             TomCode
           </h1>

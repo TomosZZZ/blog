@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { convertImageToBase64 } from "@/app/utils";
 import { FaX } from "react-icons/fa6";
-import { useCreatePost } from "../../api/createPost/use-create-post";
+import { useCreatePost } from "../../api/create-post/use-create-post";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 
@@ -32,9 +32,8 @@ export const CreatePostModal = ({
 }: CreatePostModalProps) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const { data: sessionData } = useSession();
-  const secret = process.env.AUTH_SECRET;
 
-  const { mutate, isPending, isError, isSuccess } = useCreatePost();
+  const { mutate, isPending } = useCreatePost();
 
   const form = useForm<z.infer<typeof createPostFormSchema>>({
     resolver: zodResolver(createPostFormSchema),
@@ -94,7 +93,6 @@ export const CreatePostModal = ({
   return (
     <div>
       <Backdrop />
-
       <div className="fixed z-50 top-[30%] left-[50%] w-[90%] sm:w-1/2 sm:min-w-[500px] transform -translate-x-1/2 -translate-y-1/2 rounded-lg bg-neutral-800 py-5 flex justify-center items-center flex-col">
         <div>
           <FaX
@@ -164,6 +162,7 @@ export const CreatePostModal = ({
                 )}
                 <Button
                   type="submit"
+                  disabled={isPending}
                   className="bg-transparent text-white border-violet-500 border-2 hover:bg-violet-500"
                 >
                   Create Post

@@ -1,8 +1,6 @@
+import { Blog } from "@/features/blog";
+
 const BlogPage = () => {
-  return (
-    <div className="text-white">
-      <h1 className="text-4xl font-bold">Blog</h1>
-    </div>
-  );
+  return <Blog />;
 };
 export default BlogPage;

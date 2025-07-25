@@ -21,8 +21,6 @@ export const useCreatePost = () => {
         const text = await res.text();
         throw new Error(text || "Coś poszło nie tak");
       }
-      const data = await res.json();
-      return data;
     },
   });
   return createPostMutation;

@@ -28,7 +28,7 @@ export const PostGrid = () => {
           <h2 className={`text-2xl font-semibold mb-8 ${silkscreen.className}`}>
             🚀 Check out the latest articles
           </h2>
-          <div className="flex flex-wrap gap-x-6 gap-y-8 justify-center ">
+          <div className="flex flex-wrap gap-x-6 gap-y-8 justify-center text-left ">
             {getSortedPosts(posts || [])
               .slice(0, 3)
               .map((post, index) => (

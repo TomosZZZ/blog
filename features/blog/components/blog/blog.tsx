@@ -1,37 +1,11 @@
 "use client";
-import { useGetPosts } from "@/features/blog/api";
-import { extractTextFromTipTapJSON } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import { PostCard } from "./post-card";
 
+import { PostCard } from "./post/post-card";
 import { silkscreen } from "@/shared/fonts";
-import Link from "next/link";
+import { usePostDescriptions } from "../../hooks/usePostDescription";
 
 export const Blog = () => {
-  const { data, isLoading, isError } = useGetPosts();
-  const [postDescriptions, setPostDescriptions] = useState<string[]>([]);
-  const [areDescriptionsLoading, setDescriptionsLoading] = useState(true);
-
-  useEffect(() => {
-    if (!data) return;
-
-    setDescriptionsLoading(true);
-
-    const descriptions: string[] = [];
-
-    for (const post of data) {
-      try {
-        const contentJson = JSON.parse(post.content);
-        const text = extractTextFromTipTapJSON(contentJson);
-        descriptions.push(text);
-      } catch (e) {
-        descriptions.push("");
-      }
-    }
-    setPostDescriptions(descriptions);
-    setDescriptionsLoading(false);
-  }, [data]);
-
+  const { posts, descriptions, isLoading, isError } = usePostDescriptions();
   return (
     <div className="text-white">
       <h1
@@ -42,13 +16,12 @@ export const Blog = () => {
       <div className="flex flex-wrap gap-x-6 gap-y-8 justify-center my-4">
         {!isLoading &&
           !isError &&
-          !areDescriptionsLoading &&
-          data?.map((post, index) => (
+          posts?.map((post, index) => (
             <PostCard
               key={post.id}
               date={post.createdAt.toString().split("T")[0]}
               title={post.title}
-              description={postDescriptions[index]}
+              description={descriptions[index]}
               thumbnail={post.thumbnail}
               slug={post.slug}
             />

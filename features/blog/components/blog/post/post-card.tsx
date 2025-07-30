@@ -17,9 +17,9 @@ export const PostCard = (props: PostCardProps) => {
   return (
     <Link
       href={`/blog/${slug}`}
-      className={`h-[380px] basis-[80%] sm:basis-[43%] lg:basis-[28%] 2xl:basis-[20%] group hover:scale-[1.03] transition-transform duration-200 cursor-pointer overflow-hidden`}
+      className={`h-[350px] basis-[80%] sm:basis-[43%] lg:basis-[30%] 2xl:basis-[20%] group hover:scale-[1.03] transition-transform duration-200 cursor-pointer overflow-hidden`}
     >
-      <div className="w-full h-[55%] relative rounded-t-lg overflow-hidden">
+      <div className="w-full h-[50%] relative rounded-t-lg overflow-hidden">
         <Image
           src={thumbnail}
           alt={`Thumbnail for ${title}`}

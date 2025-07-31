@@ -5,6 +5,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import React, { useEffect, useState } from "react";
 import { RichTextEditorExtensions } from "../../text-editor";
 import Image from "next/image";
+import { Loader } from "@/shared/components";
 
 type Props = {
   postId: string;
@@ -46,16 +47,14 @@ export const Post = ({ postId }: Props) => {
     };
   }, [editor]);
 
-  if (isLoading)
-    return <div className="text-white text-center">Loading...</div>;
+  if (isLoading) return <Loader />;
 
   if (isError)
     return (
       <div className="text-red-500 text-center">Błąd: {error.message}</div>
     );
 
-  if (!parsedContent)
-    return <div className="text-white text-center">Ładowanie treści...</div>;
+  if (!parsedContent) return <Loader />;
 
   return (
     <div className="text-white w-3/4 mx-auto">

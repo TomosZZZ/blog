@@ -53,6 +53,11 @@ export const authConfig = {
         .setIssuedAt()
         .setExpirationTime("1h")
         .sign(secret);
+
+      if (token.role) {
+        session.user.role = token.role;
+      }
+
       return session;
     },
     async jwt({ token, user }) {

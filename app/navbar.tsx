@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 const Navbar = () => {
   const { data: session } = useSession();
 
+  const isAdmin = session?.user?.role === "ADMIN";
+
   return (
     <nav className=" h-[10%] py-5 sm:px-4 px-1 bg-neutral-900 text-white border-b border-white border-opacity-10 flex flex-col gap-4 sm:flex-row items-center justify-between mb-5">
       <div className="md:w-1/2 sm:w-2/5 w-full flex justify-center">
@@ -40,6 +42,13 @@ const Navbar = () => {
               href="/auth/signup"
             >
               Sign up
+            </Link>
+          </li>
+        )}
+        {isAdmin && (
+          <li className="md:text-xl text-lg">
+            <Link className="hover:text-gray-200" href="/blog/new-post">
+              Create
             </Link>
           </li>
         )}

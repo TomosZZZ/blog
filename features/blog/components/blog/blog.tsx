@@ -3,6 +3,8 @@
 import { PostCard } from "./post/post-card";
 import { silkscreen } from "@/shared/fonts";
 import { usePostDescriptions } from "../../hooks/usePostDescription";
+import { BarLoader } from "react-spinners";
+import { Loader } from "@/shared/components";
 
 export const Blog = () => {
   const { posts, descriptions, isLoading, isError } = usePostDescriptions();
@@ -13,6 +15,7 @@ export const Blog = () => {
       >
         Blog
       </h1>
+      {isLoading && <Loader />}
       <div className="flex flex-wrap gap-x-6 gap-y-8 justify-center my-4">
         {!isLoading &&
           !isError &&

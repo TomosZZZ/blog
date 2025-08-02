@@ -17,25 +17,28 @@ export const PostCard = (props: PostCardProps) => {
   return (
     <Link
       href={`/blog/${slug}`}
-      className={`h-[350px] basis-[80%] sm:basis-[43%] lg:basis-[30%] 2xl:basis-[20%] group hover:scale-[1.03] transition-transform duration-200 cursor-pointer overflow-hidden`}
+      className="group flex flex-col rounded-lg bg-neutral-900 border border-neutral-700 hover:border-violet-600 transition-all duration-300 hover:shadow-lg hover:shadow-violet-600/10"
     >
-      <div className="w-full h-[50%] relative rounded-t-lg overflow-hidden">
+      <div className="w-full h-48 relative rounded-t-lg overflow-hidden">
         <Image
           src={thumbnail}
           alt={`Thumbnail for ${title}`}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-200"
-          sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 23vw"
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          sizes="(max-width: 640px) 80vw, (max-width: 1024px) 45vw, 30vw"
         />
       </div>
 
-      <div className="p-4 bg-gray-100 h-[45%] rounded-b-lg shadow-md flex flex-col">
-        <h2 className="text-md md:text-lg font-bold text-black">{title}</h2>
-        <p className="text-gray-800 text-sm sm:text-md mt-2  line-clamp-2">
+      <div className="p-4 flex flex-col flex-1">
+        {" "}
+        <h2 className="text-lg font-bold text-gray-100">{title}</h2>
+        <p className="text-gray-400 text-sm mt-2 line-clamp-3 flex-grow">
+          {" "}
           {description}
         </p>
-        <div className="flex justify-end mt-auto">
-          <p className="text-gray-600 text-xs sm:text-sm">{date}</p>
+        <div className="flex justify-end mt-4">
+          {" "}
+          <p className="text-gray-500 text-xs">{date}</p>
         </div>
       </div>
     </Link>

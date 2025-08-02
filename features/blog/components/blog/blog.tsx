@@ -1,22 +1,24 @@
 "use client";
 
-import { PostCard } from "./post/post-card";
+import { Loader } from "@/shared/components";
 import { silkscreen } from "@/shared/fonts";
 import { usePostDescriptions } from "../../hooks/usePostDescription";
-import { BarLoader } from "react-spinners";
-import { Loader } from "@/shared/components";
+import { PostCard } from "./post/post-card";
 
 export const Blog = () => {
   const { posts, descriptions, isLoading, isError } = usePostDescriptions();
+
   return (
-    <div className="text-white">
+    <div className="text-white w-full px-4 sm:px-6 lg:px-8">
       <h1
-        className={`text-4xl font-bold text-center my-5 md:my-10 ${silkscreen.className}`}
+        className={`text-4xl font-bold text-center my-8 md:my-12 ${silkscreen.className}`}
       >
         Blog
       </h1>
+
       {isLoading && <Loader />}
-      <div className="flex flex-wrap gap-x-6 gap-y-8 justify-center my-4">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 my-4">
         {!isLoading &&
           !isError &&
           posts?.map((post, index) => (

@@ -1,7 +1,21 @@
-import React from "react";
+"use client";
 
-export const Backdrop = () => {
+import React from "react";
+import { motion } from "framer-motion";
+
+interface BackdropProps {
+  onClick?: () => void;
+}
+
+export const Backdrop = ({ onClick }: BackdropProps) => {
   return (
-    <div className="fixed inset-0 bg-neutral-400 bg-opacity-50 z-40"></div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      onClick={onClick}
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+    ></motion.div>
   );
 };

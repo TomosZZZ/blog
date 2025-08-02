@@ -20,6 +20,7 @@ import { FaX } from "react-icons/fa6";
 import { useCreatePost } from "../../api/create-post/use-create-post";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 interface CreatePostModalProps {
   content: string;
@@ -31,6 +32,8 @@ export const CreatePostModal = ({
   onCloseModal,
 }: CreatePostModalProps) => {
   const [fileName, setFileName] = useState<string | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+
   const { data: sessionData } = useSession();
 
   const { mutate, isPending } = useCreatePost();
@@ -92,28 +95,32 @@ export const CreatePostModal = ({
 
   return (
     <div>
-      <Backdrop />
-      <div className="fixed z-50 top-[30%] left-[50%] w-[90%] sm:w-1/2 sm:min-w-[500px] transform -translate-x-1/2 -translate-y-1/2 rounded-lg bg-neutral-800 py-5 flex justify-center items-center flex-col">
-        <div>
-          <FaX
-            className="text-white text-xl cursor-pointer absolute top-5 right-5"
+      <Backdrop onClick={onCloseModal} />
+      <div className="fixed z-50 top-1/2 left-1/2 w-[90%] max-w-xl transform -translate-x-1/2 -translate-y-1/2 rounded-lg bg-neutral-900 border border-neutral-700 shadow-xl shadow-purple-600/10 p-6 flex flex-col">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-white text-2xl font-bold">Create Post</h1>
+          <button
             onClick={onCloseModal}
-          />
+            className="text-gray-400 hover:text-white transition-colors"
+          >
+            <FaX className="text-xl" />
+          </button>
         </div>
-        <h1 className="text-white text-2xl font-bold text-center">
-          Create Post
-        </h1>
-        <div className="w-4/5">
+
+        <div className="w-full">
           <Form {...form}>
-            <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               <FormField
                 name="title"
                 control={control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel className="text-gray-300">Title</FormLabel>
                     <FormControl>
-                      <Input className="text-black" {...field} />
+                      <Input
+                        className="bg-neutral-800 border-neutral-600 text-white placeholder:text-neutral-500 focus:border-violet-500"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -124,48 +131,59 @@ export const CreatePostModal = ({
                 control={control}
                 render={({ field: { onChange } }) => (
                   <FormItem>
-                    <FormLabel>Thumbnail</FormLabel>
+                    <FormLabel className="text-gray-300">Thumbnail</FormLabel>
                     <FormControl>
-                      <div className="flex items-center gap-2">
-                        <Input
-                          type="text"
-                          readOnly
-                          placeholder="Upload a thumbnail"
-                          value={fileName || ""}
-                          className="cursor-pointer text-black"
-                          onClick={() =>
-                            document.getElementById("file-upload")?.click()
-                          }
-                        />
+                      <div className="flex items-center gap-4">
+                        <label
+                          htmlFor="file-upload"
+                          className="flex-1 cursor-pointer rounded-md bg-neutral-800 border border-neutral-600 text-neutral-400 hover:border-violet-500 p-2 text-center transition-colors"
+                        >
+                          {fileName || "Click to upload an image"}
+                        </label>
                         <input
                           id="file-upload"
                           type="file"
                           className="hidden"
-                          accept="image/png, image/jpeg, image/jpg, image/svg+xml, image/gif"
-                          onChange={(e) => {
+                          accept="image/*"
+                          onChange={async (e) => {
                             const file = e.target.files?.[0];
-                            setFileName(file ? file.name : null);
-                            onChange(file);
+                            if (file) {
+                              setFileName(file.name);
+                              onChange(file);
+                              const preview = await convertImageToBase64(file);
+                              if (preview.success)
+                                setThumbnailPreview(preview.result);
+                            }
                           }}
                         />
+                        {thumbnailPreview && (
+                          <div className="w-24 h-16 relative rounded-md overflow-hidden border border-neutral-600">
+                            <Image
+                              src={thumbnailPreview}
+                              alt="Thumbnail preview"
+                              layout="fill"
+                              objectFit="cover"
+                            />
+                          </div>
+                        )}
                       </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div className="text-center">
+              <div className="text-center pt-2">
                 {errors.root && (
-                  <FormMessage className="text-red-500 text-sm mb-2">
+                  <p className="text-red-500 text-sm mb-4">
                     {errors.root.message}
-                  </FormMessage>
+                  </p>
                 )}
                 <Button
                   type="submit"
                   disabled={isPending}
-                  className="bg-transparent text-white border-violet-500 border-2 hover:bg-violet-500"
+                  className="bg-violet-700 text-white font-bold hover:bg-violet-600 w-full sm:w-auto px-10 py-2.5 text-lg"
                 >
-                  Create Post
+                  {isPending ? "Creating..." : "Create Post"}
                 </Button>
               </div>
             </form>

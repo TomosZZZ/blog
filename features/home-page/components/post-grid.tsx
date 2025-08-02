@@ -7,42 +7,68 @@ import { usePostDescriptions } from "@/features/blog";
 import { PostCard } from "@/features/blog/components/blog/post/post-card";
 import { silkscreen } from "@/shared/fonts";
 import { Post } from "@/features/blog/types/post";
+
+const gridContainerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+    },
+  },
+};
+
+const gridItemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  show: { y: 0, opacity: 1, transition: { duration: 0.5 } },
+};
+
 export const PostGrid = () => {
   const { posts, descriptions, isLoading, isError } = usePostDescriptions();
 
   const getSortedPosts = (posts: Post[]) => {
-    return posts.sort((a, b) => {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    });
+    return posts.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
   };
 
   return (
     <>
       {!isLoading && !isError && (
-        <motion.div
-          className="w-full text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
-        >
-          <h2 className={`text-2xl font-semibold mb-8 ${silkscreen.className}`}>
+        <section className="w-full text-center">
+          {" "}
+          <h2
+            className={`text-3xl lg:text-4xl font-semibold mb-10 ${silkscreen.className}`}
+          >
             🚀 Check out the latest articles
           </h2>
-          <div className="flex flex-wrap gap-x-6 gap-y-8 justify-center text-left ">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left"
+            variants={gridContainerVariants}
+            initial="hidden"
+            animate="show"
+          >
             {getSortedPosts(posts || [])
               .slice(0, 3)
               .map((post, index) => (
-                <PostCard
+                <motion.div
                   key={post.id}
-                  description={descriptions[index]}
-                  title={post.title}
-                  slug={post.slug}
-                  thumbnail={post.thumbnail}
-                  date={post.createdAt.toString().split("T")[0]}
-                />
+                  variants={gridItemVariants}
+                  className="h-full flex"
+                >
+                  <PostCard
+                    description={descriptions[index]}
+                    title={post.title}
+                    slug={post.slug}
+                    thumbnail={post.thumbnail}
+                    date={post.createdAt.toString().split("T")[0]}
+                  />
+                </motion.div>
               ))}
-          </div>
-        </motion.div>
+          </motion.div>
+        </section>
       )}
     </>
   );

@@ -1,11 +1,13 @@
+// Post.tsx
+
 "use client";
 
 import { useGetPostById } from "@/features/blog/api";
 import { EditorContent, useEditor } from "@tiptap/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { RichTextEditorExtensions } from "../../text-editor";
-import Image from "next/image";
-import { Loader } from "@/shared/components";
+import { default as NextImage } from "next/image";
+import { PostSkeleton } from "./post-skeleton";
 
 type Props = {
   postId: string;
@@ -13,69 +15,68 @@ type Props = {
 
 export const Post = ({ postId }: Props) => {
   const { data, isLoading, isError, error } = useGetPostById(postId);
-  const [parsedContent, setParsedContent] = useState(null);
-
-  useEffect(() => {
-    if (!data?.content) return;
-
-    try {
-      const contentJson = JSON.parse(data.content);
-      setParsedContent(contentJson);
-    } catch (e) {
-      console.error("Error parsing content:", e);
-    }
-  }, [data]);
 
   const editor = useEditor({
     extensions: RichTextEditorExtensions,
-    content: parsedContent || null,
+    content: "",
     editable: false,
-    immediatelyRender: false,
   });
 
   useEffect(() => {
-    if (!editor || !parsedContent) return;
+    if (!editor || !data?.content) {
+      return;
+    }
 
-    editor.commands.setContent(parsedContent);
-  }, [parsedContent, editor]);
+    try {
+      const newContent = JSON.parse(data.content);
 
-  useEffect(() => {
-    return () => {
-      if (editor) {
-        editor.destroy();
+      const currentContent = editor.getJSON();
+
+      if (JSON.stringify(currentContent) !== JSON.stringify(newContent)) {
+        editor.commands.setContent(newContent, false);
       }
-    };
-  }, [editor]);
+    } catch (e) {
+      console.error("Failed to parse or set editor content:", e);
+    }
+  }, [data, editor]);
 
-  if (isLoading) return <Loader />;
+  if (isLoading) {
+    return <PostSkeleton />;
+  }
 
-  if (isError)
+  if (isError || !data) {
     return (
-      <div className="text-red-500 text-center">Błąd: {error.message}</div>
+      <div className="text-red-500 text-center py-20">
+        <h2>Something went wrong!</h2>
+        <p>{error?.message || "Post could not be loaded."}</p>
+      </div>
     );
-
-  if (!parsedContent) return <Loader />;
+  }
 
   return (
-    <div className="text-white w-3/4 mx-auto">
-      {data && (
-        <div className="flex flex-col gap-6">
-          <div className="w-full mx-auto relative aspect-video overflow-hidden">
-            <Image
+    <article className="text-white w-full max-w-4xl mx-auto px-4 py-8">
+      <div className="flex flex-col gap-8">
+        <div>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-center">
+            {data.title}
+          </h1>
+
+          <div className="w-full relative aspect-video overflow-hidden rounded-lg shadow-lg">
+            <NextImage
               src={data.thumbnail}
               alt={`Thumbnail for ${data.title}`}
               fill
               className="object-cover"
-              sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 23vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 1200px"
+              priority
             />
           </div>
-
-          <h1 className="text-3xl font-bold mb-4 text-center ">{data.title}</h1>
-          <div className="prose prose-invert max-w-none py-5">
-            <EditorContent editor={editor} />
-          </div>
         </div>
-      )}
-    </div>
+
+        <div className="prose prose-lg prose-invert max-w-none py-5">
+          <EditorContent editor={editor} />
+        </div>
+      </div>
+    </article>
   );
 };

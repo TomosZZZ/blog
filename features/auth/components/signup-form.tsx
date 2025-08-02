@@ -45,14 +45,14 @@ const SignupForm = () => {
   };
 
   return (
-    <Card className="lg:w-1/3 md:w-1/2 w-[80%] max-w-[500px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[40%] bg-[#050505] border-black sm:py-10 py-5   shadow-[0_8px_50px_rgb(255,255,255,0.2)] text-white flex flex-col items-center gap-2 sm:gap-6">
-      <h1 className="sm:text-4xl text-2xl font-extrabold  text-center up ">
-        Sign up
+    <Card className="w-[90%] max-w-[500px]  bg-[#1F1F1F] border-none py-10 shadow-xl shadow-purple-600/20 text-white flex flex-col items-center px-4 gap-3 md:gap-10">
+      <h1 className="text-3xl md:text-4xl font-extrabold text-center tracking-tight">
+        Sign Up
       </h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(submitHandler)}
-          className="lg:w-1/2 sm:w-4/5 w-[95%]  sm:min-w-[300px] min-w-[250px]  flex flex-col gap-2 text-lg "
+          className="w-full max-w-sm flex flex-col gap-2 md:gap-6 text-md sm:text-lg"
         >
           <FormField
             control={form.control}
@@ -62,7 +62,7 @@ const SignupForm = () => {
                 <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input
-                    className="text-black"
+                    className="bg-transparent border border-slate-700 placeholder:text-slate-500 focus:border-violet-500 transition-colors"
                     placeholder="Joe Doe"
                     {...field}
                   />
@@ -79,7 +79,7 @@ const SignupForm = () => {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
-                    className="text-black"
+                    className="bg-transparent border border-slate-700 placeholder:text-slate-500 focus:border-violet-500 transition-colors"
                     type="email"
                     placeholder="joedoe@mail.com"
                     {...field}
@@ -97,7 +97,7 @@ const SignupForm = () => {
                 <FormLabel>Password</FormLabel>
                 <FormControl>
                   <Input
-                    className="text-black"
+                    className="bg-transparent border border-slate-700 placeholder:text-slate-500 focus:border-violet-500 transition-colors"
                     placeholder="******"
                     type="password"
                     {...field}
@@ -113,16 +113,20 @@ const SignupForm = () => {
           <Button
             disabled={isPending}
             type="submit"
-            className="bg-violet-700 text-xl hover:bg-violet-900"
+            className="mt-2 bg-violet-700 text-xl font-bold hover:bg-violet-800 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-[#1F1F1F] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Create account
+            {isPending ? "Creating account..." : "Create account"}
           </Button>
 
-          <Link href="/auth/login" className="text-center mt-3">
-            <Button className="text-white font-thin underline" variant={"link"}>
-              Already have an account? Log in!
-            </Button>
-          </Link>
+          <p className="text-center text-sm text-slate-400 mt-4">
+            Already have an account?{" "}
+            <Link
+              href="/auth/login"
+              className="font-semibold text-violet-400 hover:text-violet-300 transition-colors"
+            >
+              Log in!
+            </Link>
+          </p>
         </form>
       </Form>
     </Card>

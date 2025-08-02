@@ -21,6 +21,7 @@ import { signIn } from "next-auth/react";
 import { FormMessage } from "./form-message";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface FormStatus {
   message: string;
@@ -59,14 +60,16 @@ const LoginForm = () => {
     router.replace("/blog");
     setFormStatus({ message: "Success", status: "success" });
   };
-
   return (
-    <Card className="lg:w-1/3 md:w-1/2 w-[80%] max-w-[500px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#050505] border-black py-10  shadow-[0_8px_50px_rgb(255,255,255,0.2)] text-white flex flex-col items-center gap-12">
-      <h1 className="text-4xl font-extrabold  text-center ">Login</h1>
+    <Card className=" w-[90%] max-w-[500px]  bg-[#1F1F1F] border-none py-10 shadow-xl shadow-purple-600/20 px-4 text-white flex flex-col items-center gap-3 md:gap-10">
+      {" "}
+      <h1 className="text-3xl md:text-4xl font-extrabold text-center tracking-tight">
+        Login
+      </h1>{" "}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(submitHandler)}
-          className="lg:w-1/2 sm:w-4/5 w-[90%]  sm:min-w-[300px] min-w-[250px]  flex flex-col gap-8 text-lg "
+          className="w-full max-w-sm flex flex-col gap-3 md:gap-6 text-md sm:text-lg"
         >
           <FormField
             control={form.control}
@@ -76,7 +79,7 @@ const LoginForm = () => {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
-                    className="text-black"
+                    className="bg-transparent border border-slate-700 placeholder:text-slate-500 focus:border-violet-500 transition-colors"
                     type="email"
                     placeholder="joedoe@mail.com"
                     {...field}
@@ -94,7 +97,7 @@ const LoginForm = () => {
                 <FormLabel>Password</FormLabel>
                 <FormControl>
                   <Input
-                    className="text-black"
+                    className="bg-transparent border border-slate-700 placeholder:text-slate-500 focus:border-violet-500 transition-colors"
                     placeholder="******"
                     type="password"
                     {...field}
@@ -109,12 +112,21 @@ const LoginForm = () => {
           )}
           <Button
             type="submit"
-            className="bg-violet-700 text-xl hover:bg-violet-900"
+            className="bg-violet-700 text-xl font-bold hover:bg-violet-800 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-[#1F1F1F] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={formStatus.status === "loading"}
           >
-            Login
+            {formStatus.status === "loading" ? "Logging in..." : "Login"}
           </Button>
         </form>
+        <p className="text-center text-sm text-slate-400 mt-6">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/auth/signup"
+            className="font-semibold text-violet-400 hover:text-violet-300 transition-colors"
+          >
+            Register
+          </Link>
+        </p>
       </Form>
     </Card>
   );

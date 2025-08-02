@@ -1,7 +1,11 @@
-import LoginForm from '@/features/auth/components/login-form'
+import LoginForm from "@/features/auth/components/login-form";
 
 const LoginPage = () => {
-	return <LoginForm />
-}
+  return (
+    <div className="flex items-center justify-center py-5">
+      <LoginForm />
+    </div>
+  );
+};
 
-export default LoginPage
+export default LoginPage;

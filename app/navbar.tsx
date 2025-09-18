@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react"; // <-- Dodano useState
-import { usePathname } from "next/navigation"; // <-- Dodano usePathname
+
+import React, { useState } from "react";
+import { usePathname } from "next/navigation";
 
 import { silkscreen } from "@/shared/fonts";
 import Link from "next/link";
@@ -20,7 +21,7 @@ const Navbar = () => {
     "border-violet-500 border-2 rounded-lg tracking-widest text-lg hover:bg-violet-800 hover:text-white transition-colors py-2 px-4";
 
   return (
-    <nav className="sticky top-0 z-50 h-20 w-full mb-5 bg-neutral-900 text-white border-b border-white/10 px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-50 h-20 w-full  bg-neutral-900 text-white border-b border-white/10 px-4 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between h-full">
         <Link href={"/"} onClick={() => setIsMenuOpen(false)}>
           <h1
@@ -49,18 +50,33 @@ const Navbar = () => {
           })}
 
           {isAdmin && (
-            <li>
-              <Link
-                className={`text-lg transition-colors hover:text-violet-400 ${
-                  pathname === "/blog/new-post"
-                    ? "text-violet-400 font-semibold"
-                    : ""
-                }`}
-                href="/blog/new-post"
-              >
-                Create
-              </Link>
-            </li>
+            <>
+              <li>
+                <Link
+                  className={`text-lg transition-colors hover:text-violet-400 ${
+                    pathname === "/blog/new-post"
+                      ? "text-violet-400 font-semibold"
+                      : ""
+                  }`}
+                  href="/blog/new-post"
+                >
+                  Create
+                </Link>
+              </li>
+              <li>
+                {" "}
+                <Link
+                  className={`text-lg transition-colors hover:text-violet-400 ${
+                    pathname.startsWith("/admin")
+                      ? "text-violet-400 font-semibold"
+                      : ""
+                  }`}
+                  href="/admin"
+                >
+                  Admin
+                </Link>
+              </li>
+            </>
           )}
 
           {session ? (
@@ -126,19 +142,34 @@ const Navbar = () => {
           })}
 
           {isAdmin && (
-            <li className="list-none">
-              <Link
-                onClick={() => setIsMenuOpen(false)}
-                className={`text-xl transition-colors hover:text-violet-400 ${
-                  pathname === "/blog/new-post"
-                    ? "text-violet-400 font-semibold"
-                    : ""
-                }`}
-                href="/blog/new-post"
-              >
-                Create
-              </Link>
-            </li>
+            <>
+              <li className="list-none">
+                <Link
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`text-xl transition-colors hover:text-violet-400 ${
+                    pathname === "/blog/new-post"
+                      ? "text-violet-400 font-semibold"
+                      : ""
+                  }`}
+                  href="/blog/new-post"
+                >
+                  Create
+                </Link>
+              </li>
+              <li className="list-none">
+                <Link
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`text-xl transition-colors hover:text-violet-400 ${
+                    pathname.startsWith("/admin")
+                      ? "text-violet-400 font-semibold"
+                      : ""
+                  }`}
+                  href="/admin"
+                >
+                  Admin
+                </Link>
+              </li>
+            </>
           )}
 
           {session ? (

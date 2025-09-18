@@ -1,5 +1,3 @@
-// Post.tsx
-
 "use client";
 
 import { useGetPostById } from "@/features/blog/api";

@@ -23,7 +23,7 @@ export const NewPostEditor = () => {
     setShowModal(false);
   };
   return (
-    <div className="w-3/4 text-white">
+    <div className="w-3/4 mt-5 text-white">
       {showModal && (
         <CreatePostModal onCloseModal={closeModalHandler} content={content} />
       )}

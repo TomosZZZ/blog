@@ -1,7 +1,7 @@
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { PostTableData } from "../../types/post-table-data";
 
-import { UUIDCell } from "../uuid-cell";
+import { UUIDCell } from "../data-table/cells/uuid-cell";
 import { DataTableMenu } from "../data-table";
 
 const columnHelper = createColumnHelper<PostTableData>();

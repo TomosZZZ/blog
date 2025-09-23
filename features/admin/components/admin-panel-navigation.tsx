@@ -3,15 +3,13 @@
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { silkscreen } from "@/shared/fonts"; // Zakładam, że ścieżka do fontów jest ta sama
 
-// Ikony (możesz użyć react-icons lub innych)
 import {
   RiFileListLine,
   RiUserLine,
   RiBarChartLine,
   RiSettings3Line,
-} from "react-icons/ri"; // Przykładowe ikony
+} from "react-icons/ri";
 
 const ADMIN_LINKS = [
   { href: "/admin/manage-posts", text: "Posts", icon: RiFileListLine },
@@ -29,7 +27,7 @@ const AdminPanelNavigation = () => {
 
   return (
     <>
-      <div className="md:hidden sticky top-0 z-40   p-4 flex justify-between items-center h-20">
+      <div className="md:hidden sticky top-0 z-40 p-4 flex justify-between items-center h-20">
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           aria-label="Toggle admin menu"
@@ -45,7 +43,7 @@ const AdminPanelNavigation = () => {
             md:translate-x-0 md:static md:h-auto md:pt-6`}
       >
         <nav>
-          <ul className="flex flex-col gap-4 pt-5">
+          <ul className="flex flex-col  gap-4 pt-5">
             {ADMIN_LINKS.map((link) => {
               const isActive = pathname.startsWith(link.href);
               const IconComponent = link.icon;

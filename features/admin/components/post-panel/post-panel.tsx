@@ -1,7 +1,7 @@
 "use client";
 import { useGetPosts } from "@/features/blog/api";
 import React from "react";
-import { DataTable } from "../data-table";
+import { DataTable } from "../data-table/data-table";
 import { columns } from "./columns";
 import { PostTableData } from "../../types/post-table-data";
 

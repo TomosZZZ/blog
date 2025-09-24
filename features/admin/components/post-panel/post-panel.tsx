@@ -1,13 +1,13 @@
 "use client";
 import { useGetPosts } from "@/features/blog/api";
+import { useGetPostColumns } from "@/features/admin/hooks";
 import React from "react";
-import { DataTable } from "../data-table/data-table";
-import { columns } from "./columns";
-import { PostTableData } from "../../types/post-table-data";
+import { DataTable } from "@/features/admin/components/data-table/data-table";
+import { PostTableData } from "@/features/admin/types/post-table-data";
 
 export const PostPanel = () => {
   const { data: posts, isLoading, isError } = useGetPosts();
-
+  const columns = useGetPostColumns();
   const dataTablePosts = posts?.map((post) => {
     return {
       title: post.title,

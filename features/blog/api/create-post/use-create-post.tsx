@@ -19,7 +19,7 @@ export const useCreatePost = () => {
       });
       if (!res.ok) {
         const text = await res.text();
-        throw new Error(text || "Coś poszło nie tak");
+        throw new Error(text || "Something went wrong");
       }
     },
   });

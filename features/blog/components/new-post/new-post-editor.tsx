@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { RichTextEditor } from "../text-editor";
 import { Button } from "@/components/ui/button";
 import { Editor } from "@tiptap/react";
-import { CreatePostModal } from "../modal";
+import { PostFormModal } from "../modal";
 
 export const NewPostEditor = () => {
   const [editor, setEditor] = useState<Editor | null>(null);
@@ -25,7 +25,12 @@ export const NewPostEditor = () => {
   return (
     <div className="w-3/4 mt-5 text-white">
       {showModal && (
-        <CreatePostModal onCloseModal={closeModalHandler} content={content} />
+        <PostFormModal
+          buttonLabel="Create"
+          modalTitle="Create Post"
+          onCloseModal={closeModalHandler}
+          editorContent={content}
+        />
       )}
       <RichTextEditor setEditor={setEditor} />
       {editor && (

@@ -38,7 +38,6 @@ export const PostGrid = () => {
     <>
       {!isLoading && !isError && (
         <section className="w-full text-center">
-          {" "}
           <h2
             className={`text-3xl lg:text-4xl font-semibold mb-10 ${silkscreen.className}`}
           >

@@ -17,7 +17,7 @@ export const PostCard = (props: PostCardProps) => {
   return (
     <Link
       href={`/blog/${slug}`}
-      className="group flex flex-col rounded-lg bg-neutral-900 border border-neutral-700 hover:border-violet-600 transition-all duration-300 hover:shadow-lg hover:shadow-violet-600/10"
+      className="group flex flex-col w-full rounded-lg bg-neutral-900 border border-neutral-700 hover:border-violet-600 transition-all duration-300 hover:shadow-lg hover:shadow-violet-600/10"
     >
       <div className="w-full h-48 relative rounded-t-lg overflow-hidden">
         <Image

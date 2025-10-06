@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import { authConfig } from "@/features/auth/config/auth.config";
 import {
   ADMIN_ROUTES,
+  ADMIN_ROUTES_REGEX,
   AUTH_ROUTES,
   DEFAULT_LOGIN_REDIRECT,
 } from "./features/auth/config/routes";
@@ -9,6 +10,17 @@ import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
 const { auth } = NextAuth(authConfig);
+
+const isAdminRoute = (pathname: string): boolean => {
+  if (ADMIN_ROUTES.includes(pathname)) return true;
+
+  for (const regex of ADMIN_ROUTES_REGEX) {
+    if (regex.test(pathname)) {
+      return true;
+    }
+  }
+  return false;
+};
 
 export default auth(async (req) => {
   const { nextUrl, auth } = req;
@@ -27,8 +39,7 @@ export default auth(async (req) => {
   }
 
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
-  const isAdminRoute = ADMIN_ROUTES.includes(nextUrl.pathname);
-  const isPublicRoute = !isAdminRoute && !isAuthRoute;
+  const isPublicRoute = !isAdminRoute(nextUrl.pathname) && !isAuthRoute;
 
   if (isAuthRoute) {
     if (isLoggedIn) {
@@ -37,7 +48,7 @@ export default auth(async (req) => {
     return;
   }
 
-  if (isAdminRoute && !isAdmin) {
+  if (isAdminRoute(nextUrl.pathname) && !isAdmin) {
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   }
 

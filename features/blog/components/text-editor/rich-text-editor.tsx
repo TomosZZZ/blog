@@ -13,6 +13,7 @@ const lowlight = createLowlight(all);
 
 interface RichTextEditorProps {
   setEditor: React.Dispatch<React.SetStateAction<Editor | null>>;
+  content?: string;
 }
 
 export const RichTextEditorExtensions = [
@@ -48,10 +49,10 @@ export const RichTextEditorExtensions = [
   Typography,
 ];
 
-export const RichTextEditor = ({ setEditor }: RichTextEditorProps) => {
+export const RichTextEditor = ({ setEditor, content }: RichTextEditorProps) => {
   const editor = useEditor({
     extensions: RichTextEditorExtensions,
-    content: "<p>Hello World! 🌎️</p>",
+    content: content || "<p>Hello World! 🌎️</p>",
     editorProps: {
       attributes: {
         class:

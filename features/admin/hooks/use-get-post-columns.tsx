@@ -5,6 +5,7 @@ import { UUIDCell } from "@/features/admin/components/data-table/cells/uuid-cell
 import { DataTableMenu } from "@/features/admin/components/data-table/data-table-menu";
 import { useDeletePost } from "@/features/blog/api";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const columnHelper = createColumnHelper<PostTableData>();
 
@@ -15,10 +16,12 @@ export const useGetPostColumns = () => {
 
   const { mutate: deletePost, isPending, isError } = useDeletePost();
 
+  const router = useRouter();
+
   const actions = [
     {
       label: "Edit",
-      onClick: (id: string) => console.log("Edit clicked", id),
+      onClick: (id: string) => router.push(`/blog/update-post/${id}`),
     },
     {
       label: "Delete",

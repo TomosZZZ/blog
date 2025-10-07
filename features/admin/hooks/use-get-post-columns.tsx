@@ -14,7 +14,7 @@ export const useGetPostColumns = () => {
   const token = sessionData?.accessToken;
   if (!token) throw new Error("Authentication token not found");
 
-  const { mutate: deletePost, isPending, isError } = useDeletePost();
+  const { mutate: deletePost } = useDeletePost();
 
   const router = useRouter();
 
@@ -33,7 +33,6 @@ export const useGetPostColumns = () => {
     columnHelper.accessor("id", {
       header: () => "ID",
       cell: (info) => {
-        console.log(info);
         return <UUIDCell uuid={info.getValue()} />;
       },
     }),
@@ -47,7 +46,9 @@ export const useGetPostColumns = () => {
     columnHelper.display({
       id: "actions",
       cell: (info) => (
-        <DataTableMenu actions={actions} id={info.row.original.id} />
+        <div className="flex justify-end">
+          <DataTableMenu actions={actions} id={info.row.original.id} />
+        </div>
       ),
     }),
   ];

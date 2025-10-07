@@ -12,9 +12,11 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import React from "react";
+import { DataTablePagination } from "./data-table-pagination";
 
 interface DataTableProps<TData extends object> {
   data: TData[];
@@ -29,6 +31,8 @@ export const DataTable = <TData extends object>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: { pagination: { pageSize: 7 } },
   });
 
   return (
@@ -55,7 +59,7 @@ export const DataTable = <TData extends object>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow className="hover:bg-transparent" key={row.id}>
+              <TableRow className="hover:bg-transparent " key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -72,6 +76,7 @@ export const DataTable = <TData extends object>({
           )}
         </TableBody>
       </Table>
+      <DataTablePagination table={table} />
     </div>
   );
 };

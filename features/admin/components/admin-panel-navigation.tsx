@@ -38,7 +38,7 @@ const AdminPanelNavigation = () => {
       </div>
 
       <aside
-        className={`fixed top-0 left-0 z-40 h-full min-w-48 max-w-64 w-[20%]  bg-neutral-900 border-r border-white/10 p-6 pt-20 transition-transform duration-300 ease-in-out
+        className={`fixed top-80 left-0 z-40 h-full min-w-48 max-w-64 w-[20%]  bg-neutral-900 border-r border-white/10 p-6 pt-20 transition-transform duration-300 ease-in-out
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
             md:translate-x-0 md:static md:h-auto md:pt-6`}
       >

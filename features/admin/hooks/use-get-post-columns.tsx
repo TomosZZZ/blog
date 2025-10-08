@@ -6,6 +6,8 @@ import { DataTableMenu } from "@/features/admin/components/data-table/data-table
 import { useDeletePost } from "@/features/blog/api";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown } from "lucide-react";
 
 const columnHelper = createColumnHelper<PostTableData>();
 
@@ -31,17 +33,28 @@ export const useGetPostColumns = () => {
 
   const columns: ColumnDef<PostTableData, any>[] = [
     columnHelper.accessor("id", {
-      header: () => "ID",
+      header: () => <div>ID</div>,
       cell: (info) => {
         return <UUIDCell uuid={info.getValue()} />;
       },
     }),
     columnHelper.accessor("title", {
-      header: () => "Title",
+      header: () => <div>Title</div>,
     }),
     columnHelper.accessor("createdAt", {
-      header: () => "Created At",
-      cell: (info) => new Date(info.getValue()).toLocaleDateString(),
+      header: ({ column }) => (
+        <Button
+          variant={"ghost"}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="w-full justify-start hover:bg-transparent hover:text-white gap-2 px-0"
+        >
+          Created At
+          <ArrowUpDown size={16} />
+        </Button>
+      ),
+      cell: (info) => (
+        <div>{new Date(info.getValue()).toLocaleDateString()}</div>
+      ),
     }),
     columnHelper.display({
       id: "actions",

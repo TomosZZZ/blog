@@ -4,6 +4,7 @@ import { useGetPostColumns } from "@/features/admin/hooks";
 import React from "react";
 import { DataTable } from "@/features/admin/components/data-table/data-table";
 import { PostTableData } from "@/features/admin/types/post-table-data";
+import { Loader } from "@/shared/components";
 
 export const PostPanel = () => {
   const { data: posts, isLoading, isError } = useGetPosts();
@@ -16,7 +17,7 @@ export const PostPanel = () => {
     };
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader />;
   if (isError) return <div>Error loading posts</div>;
 
   return (

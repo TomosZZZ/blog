@@ -1,2 +1,1 @@
-export * from "./post-panel";
 export * from "./user-panel";

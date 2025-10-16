@@ -3,7 +3,7 @@ import React from "react";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex text-white">
+    <div className="flex text-white min-h-[calc(100vh-80px)]">
       <AdminPanelNavigation />
       <main className="flex-1 p-8 pt-4">{children}</main>
     </div>

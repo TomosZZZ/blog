@@ -49,7 +49,7 @@ export const DataTable = <TData extends object>({
       sorting,
       columnFilters,
     },
-    initialState: { pagination: { pageSize: 7 } },
+    initialState: { pagination: { pageSize: 6 } },
   });
 
   return (

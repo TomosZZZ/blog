@@ -24,7 +24,11 @@ export const PostPanel = () => {
     <div>
       {dataTablePosts && (
         <div>
-          <DataTable<PostTableData> data={dataTablePosts} columns={columns} />
+          <DataTable<PostTableData>
+            data={dataTablePosts}
+            columns={columns}
+            columnFilter="title"
+          />
         </div>
       )}
     </div>

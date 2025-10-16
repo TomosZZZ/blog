@@ -21,17 +21,18 @@ import {
 } from "@tanstack/react-table";
 import React, { useState } from "react";
 import { DataTablePagination } from "./data-table-pagination";
-import { Input } from "@/components/ui/input";
 import { DataTableFilter } from "./data-table-filter";
 
 interface DataTableProps<TData extends object> {
   data: TData[];
   columns: ColumnDef<TData>[];
+  columnFilter?: string;
 }
 
 export const DataTable = <TData extends object>({
   data,
   columns,
+  columnFilter,
 }: DataTableProps<TData>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -55,7 +56,9 @@ export const DataTable = <TData extends object>({
   return (
     <>
       <div className="overflow-hidden">
-        <DataTableFilter columnName="title" table={table} />
+        {columnFilter && (
+          <DataTableFilter columnName={columnFilter} table={table} />
+        )}
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

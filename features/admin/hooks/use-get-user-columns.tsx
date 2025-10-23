@@ -1,14 +1,22 @@
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { UserTableData } from "../types/user-table-data";
 import { DataTableMenu } from "../components/data-table";
+import { useDeleteUser } from "@/features/user/api";
+import { useSession } from "next-auth/react";
 
 const columnHelper = createColumnHelper<UserTableData>();
 
 export const useGetUserColumns = () => {
+  const { mutate: deleteUser } = useDeleteUser();
+
+  const { data: sessionData } = useSession();
+  const token = sessionData?.accessToken;
+  if (!token) throw new Error("Authentication token not found");
+
   const actions = [
     {
       label: "Delete",
-      onClick: (id: string) => console.log("Delete user with id: ", id),
+      onClick: (id: string) => deleteUser({ userId: id, token: token }),
     },
   ];
 

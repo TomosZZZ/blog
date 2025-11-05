@@ -31,6 +31,11 @@ export const Blog = () => {
               slug={post.slug}
             />
           ))}
+        {posts?.length === 0 && !isLoading && !isError && (
+          <div className="text-center col-span-full w-full">
+            No posts available.
+          </div>
+        )}
       </div>
     </div>
   );

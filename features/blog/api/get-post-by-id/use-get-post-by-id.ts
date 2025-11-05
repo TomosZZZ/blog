@@ -7,7 +7,16 @@ export const getPostById = async (postId: string) => {
     throw new Error("Post was not found");
   }
   if (!response.ok) {
-    throw new Error("Something went wrong");
+    let errorMessage = "Something went wrong";
+
+    try {
+      const errorData = await response.json();
+      if (errorData.message) {
+        errorMessage = errorData.message;
+      }
+    } catch (_) {}
+
+    throw new Error(errorMessage);
   }
   const data: Post | null = await response.json();
   return data;

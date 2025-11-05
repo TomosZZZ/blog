@@ -1,6 +1,6 @@
 import { Post } from "@/features";
 import { getPostById, getPosts } from "@/features/blog/api";
-import { Post as PostModel } from "@/features/blog/types/post";
+
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -21,18 +21,19 @@ export async function generateStaticParams(): Promise<PostParams[]> {
 const PostPage = async ({ params }: Props) => {
   const { slug } = params;
   const postId = slug.split("~")[1];
-
-  const post = await getPostById(postId);
-
-  if (!post) {
+  try {
+    const post = await getPostById(postId);
+    if (!post) {
+      notFound();
+    }
+    return (
+      <div className="flex items-center justify-center">
+        <Post initialData={post} />
+      </div>
+    );
+  } catch (error: any) {
     notFound();
   }
-
-  return (
-    <div className="flex items-center justify-center">
-      <Post initialData={post} />
-    </div>
-  );
 };
 
 export default PostPage;

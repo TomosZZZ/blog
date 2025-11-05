@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 const Navbar = () => {
   const { data: session } = useSession();
   const isAdmin = session?.user?.role === "ADMIN";
+  const isEditor = session?.user?.role === "EDITOR";
+  const isAdminOrEditor = isAdmin || isEditor;
 
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,7 +51,7 @@ const Navbar = () => {
             );
           })}
 
-          {isAdmin && (
+          {isAdminOrEditor && (
             <>
               <li>
                 <Link
@@ -63,19 +65,36 @@ const Navbar = () => {
                   Create
                 </Link>
               </li>
-              <li>
-                {" "}
-                <Link
-                  className={`text-lg transition-colors hover:text-violet-400 ${
-                    pathname.startsWith("/admin")
-                      ? "text-violet-400 font-semibold"
-                      : ""
-                  }`}
-                  href="/admin"
-                >
-                  Admin
-                </Link>
-              </li>
+              {isAdmin && (
+                <li>
+                  {" "}
+                  <Link
+                    className={`text-lg transition-colors hover:text-violet-400 ${
+                      pathname.startsWith("/admin")
+                        ? "text-violet-400 font-semibold"
+                        : ""
+                    }`}
+                    href="/admin"
+                  >
+                    Admin
+                  </Link>
+                </li>
+              )}
+              {isEditor && (
+                <li>
+                  {" "}
+                  <Link
+                    className={`text-lg transition-colors hover:text-violet-400 ${
+                      pathname.startsWith("/admin")
+                        ? "text-violet-400 font-semibold"
+                        : ""
+                    }`}
+                    href="/admin/manage-posts"
+                  >
+                    Posts
+                  </Link>
+                </li>
+              )}
             </>
           )}
 
@@ -141,7 +160,7 @@ const Navbar = () => {
             );
           })}
 
-          {isAdmin && (
+          {isAdminOrEditor && (
             <>
               <li className="list-none">
                 <Link
@@ -156,19 +175,36 @@ const Navbar = () => {
                   Create
                 </Link>
               </li>
-              <li className="list-none">
-                <Link
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`text-xl transition-colors hover:text-violet-400 ${
-                    pathname.startsWith("/admin")
-                      ? "text-violet-400 font-semibold"
-                      : ""
-                  }`}
-                  href="/admin"
-                >
-                  Admin
-                </Link>
-              </li>
+              {isAdmin && (
+                <li>
+                  {" "}
+                  <Link
+                    className={`text-lg transition-colors hover:text-violet-400 ${
+                      pathname.startsWith("/admin")
+                        ? "text-violet-400 font-semibold"
+                        : ""
+                    }`}
+                    href="/admin"
+                  >
+                    Admin
+                  </Link>
+                </li>
+              )}
+              {isEditor && (
+                <li>
+                  {" "}
+                  <Link
+                    className={`text-lg transition-colors hover:text-violet-400 ${
+                      pathname.startsWith("/admin")
+                        ? "text-violet-400 font-semibold"
+                        : ""
+                    }`}
+                    href="/admin/manage-posts"
+                  >
+                    Posts
+                  </Link>
+                </li>
+              )}
             </>
           )}
 

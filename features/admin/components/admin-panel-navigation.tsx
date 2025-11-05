@@ -10,17 +10,35 @@ import {
   RiBarChartLine,
   RiSettings3Line,
 } from "react-icons/ri";
+import { useSession } from "next-auth/react";
 
 const ADMIN_LINKS = [
-  { href: "/admin/manage-posts", text: "Posts", icon: RiFileListLine },
-  { href: "/admin/manage-users", text: "Users", icon: RiUserLine },
-  { href: "/admin/statistics", text: "Statistics", icon: RiBarChartLine },
+  {
+    href: "/admin/manage-posts",
+    text: "Posts",
+    icon: RiFileListLine,
+    role: ["EDITOR", "ADMIN"],
+  },
+  {
+    href: "/admin/manage-users",
+    text: "Users",
+    icon: RiUserLine,
+    role: ["ADMIN"],
+  },
+  {
+    href: "/admin/statistics",
+    text: "Statistics",
+    icon: RiBarChartLine,
+    role: ["ADMIN"],
+  },
 ];
 
 const AdminPanelNavigation = () => {
   const pathname = usePathname();
+  const { data: session } = useSession();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const userRole = session?.user?.role;
   const isAdminPath = pathname.startsWith("/admin");
 
   if (!isAdminPath) return null;
@@ -51,21 +69,26 @@ const AdminPanelNavigation = () => {
             {ADMIN_LINKS.map((link) => {
               const isActive = pathname.startsWith(link.href);
               const IconComponent = link.icon;
+
               return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setIsSidebarOpen(false)}
-                    className={`flex items-center gap-3 text-lg py-2 px-3 rounded-lg transition-colors hover:bg-violet-800 ${
-                      isActive
-                        ? "bg-violet-700 text-white font-semibold"
-                        : "text-white"
-                    }`}
-                  >
-                    <IconComponent className="w-6 h-6" />
-                    {link.text}
-                  </Link>
-                </li>
+                <>
+                  {userRole && link.role.includes(userRole) && (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        onClick={() => setIsSidebarOpen(false)}
+                        className={`flex items-center gap-3 text-lg py-2 px-3 rounded-lg transition-colors hover:bg-violet-800 ${
+                          isActive
+                            ? "bg-violet-700 text-white font-semibold"
+                            : "text-white"
+                        }`}
+                      >
+                        <IconComponent className="w-6 h-6" />
+                        {link.text}
+                      </Link>
+                    </li>
+                  )}
+                </>
               );
             })}
           </ul>

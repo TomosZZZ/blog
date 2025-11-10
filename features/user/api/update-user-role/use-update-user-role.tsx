@@ -25,7 +25,21 @@ export const useUpdateUserRole = () => {
         }
       );
       if (!res.ok) {
-        throw new Error("Something went wrong updating user role");
+        let errorMessage = "Something went wrong updating user role";
+
+        try {
+          const data = await res.json();
+          if (data && data.message) {
+            errorMessage = data.message;
+          }
+        } catch (e) {
+          const text = await res.text();
+          if (text) {
+            errorMessage = text;
+          }
+        }
+
+        throw new Error(errorMessage);
       }
     },
     onSuccess: () => {

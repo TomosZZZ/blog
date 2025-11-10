@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { User } from "@prisma/client";
 
 const getUsers = async (authHeader: string) => {
-  const res = await fetch("http://localhost:8080/api/users/get", {
+  const res = await fetch("http://localhost:8080/api/users", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

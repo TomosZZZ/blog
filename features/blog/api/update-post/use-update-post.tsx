@@ -10,17 +10,14 @@ interface UpdatePostParams {
 export const useUpdatePost = () => {
   const updatePost = useMutation({
     mutationFn: async ({ postId, post, token }: UpdatePostParams) => {
-      const res = await fetch(
-        `http://localhost:8080/api/posts/update/${postId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(post),
-        }
-      );
+      const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(post),
+      });
       if (!res.ok) {
         const text = await res.text();
         throw new Error(text || "Something went wrong");

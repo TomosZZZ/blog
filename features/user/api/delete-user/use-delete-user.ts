@@ -11,16 +11,13 @@ export const useDeleteUser = () => {
       userId: string;
       token: string;
     }) => {
-      const res = await fetch(
-        `http://localhost:8080/api/users/delete/${userId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`http://localhost:8080/api/users/${userId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!res.ok) {
         const text = await res.text();
         throw new Error(text || "Something went wrong");

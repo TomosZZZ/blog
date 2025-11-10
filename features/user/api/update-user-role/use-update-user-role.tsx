@@ -14,7 +14,7 @@ export const useUpdateUserRole = () => {
       token: string;
     }) => {
       const res = await fetch(
-        `http://localhost:8080/api/users/update/${userId}/role`,
+        `http://localhost:8080/api/users/${userId}/role`,
         {
           method: "PATCH",
           headers: {

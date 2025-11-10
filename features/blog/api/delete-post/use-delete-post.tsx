@@ -11,16 +11,13 @@ export const useDeletePost = () => {
 
   const deletePostMutation = useMutation({
     mutationFn: async ({ postId, token }: DeletePostMutationData) => {
-      const res = await fetch(
-        `http://localhost:8080/api/posts/delete/${postId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!res.ok) {
         const text = await res.text();
         throw new Error(text || "Something went wrong");

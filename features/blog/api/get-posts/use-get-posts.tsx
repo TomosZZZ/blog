@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Post } from "../../types/post";
 
 export const getPosts = async () => {
-  const res = await fetch("http://localhost:8080/api/posts/get", {
+  const res = await fetch("http://localhost:8080/api/posts", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

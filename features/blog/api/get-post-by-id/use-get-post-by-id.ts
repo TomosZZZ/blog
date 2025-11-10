@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Post } from "../../types/post";
 
 export const getPostById = async (postId: string) => {
-  const response = await fetch(`http://localhost:8080/api/posts/get/${postId}`);
+  const response = await fetch(`http://localhost:8080/api/posts/${postId}`);
   if (response.status === 404) {
     throw new Error("Post was not found");
   }

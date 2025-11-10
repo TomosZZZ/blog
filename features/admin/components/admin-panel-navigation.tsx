@@ -70,25 +70,23 @@ const AdminPanelNavigation = () => {
               const isActive = pathname.startsWith(link.href);
               const IconComponent = link.icon;
 
+              if (!userRole || !link.role.includes(userRole)) return null;
+
               return (
-                <>
-                  {userRole && link.role.includes(userRole) && (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        onClick={() => setIsSidebarOpen(false)}
-                        className={`flex items-center gap-3 text-lg py-2 px-3 rounded-lg transition-colors hover:bg-violet-800 ${
-                          isActive
-                            ? "bg-violet-700 text-white font-semibold"
-                            : "text-white"
-                        }`}
-                      >
-                        <IconComponent className="w-6 h-6" />
-                        {link.text}
-                      </Link>
-                    </li>
-                  )}
-                </>
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setIsSidebarOpen(false)}
+                    className={`flex items-center gap-3 text-lg py-2 px-3 rounded-lg transition-colors hover:bg-violet-800 ${
+                      isActive
+                        ? "bg-violet-700 text-white font-semibold"
+                        : "text-white"
+                    }`}
+                  >
+                    <IconComponent className="w-6 h-6" />
+                    {link.text}
+                  </Link>
+                </li>
               );
             })}
           </ul>

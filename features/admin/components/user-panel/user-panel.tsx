@@ -54,13 +54,14 @@ export const UserPanel = () => {
             loading={isPending}
             onConfirm={(newRole) => {
               if (!selectedUser) return;
-              console.log(newRole);
               updateUserRole({
                 userId: selectedUser.id,
                 newRole,
                 token,
               });
               if (isSuccess) {
+                setRoleModalOpen(false);
+              } else {
                 setRoleModalOpen(false);
               }
             }}

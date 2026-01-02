@@ -25,7 +25,7 @@ const gridItemVariants = {
 };
 
 export const PostGrid = () => {
-  const { posts, descriptions, isLoading, isError } = usePostDescriptions();
+  const { posts, descriptions, isLoading, isError } = usePostDescriptions({});
 
   const getSortedPosts = (posts: Post[]) => {
     return posts.sort(

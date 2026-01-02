@@ -1,27 +1,26 @@
 import { useMutation } from "@tanstack/react-query";
 import { PostDTO } from "../../types/post";
-
-interface CreatePostMutationData {
-  post: PostDTO;
-  token: string;
-}
+import { apiFetch } from "@/lib/api-fetch";
 
 export const useCreatePost = () => {
-  const createPostMutation = useMutation({
-    mutationFn: async ({ post, token }: CreatePostMutationData) => {
-      const res = await fetch("http://localhost:8080/api/posts", {
+  return useMutation({
+    mutationFn: async (post: PostDTO) => {
+      const res = await apiFetch("/api/posts", {
         method: "POST",
-        body: JSON.stringify(post),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify(post),
       });
+
       if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || "Something went wrong");
+        const data = await res.json();
+        const err = new Error(data?.message ?? "Validation error");
+        (err as any).errors = data?.errors;
+        throw err;
       }
+
+      return res.json();
     },
   });
-  return createPostMutation;
 };

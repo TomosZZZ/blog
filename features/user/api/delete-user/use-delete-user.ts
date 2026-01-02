@@ -1,35 +1,33 @@
+import { apiFetch } from "@/lib/api-fetch";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+type DeleteUserParams = {
+  userId: string;
+};
+
 export const useDeleteUser = () => {
   const queryClient = useQueryClient();
-  const deleteUserMutation = useMutation({
-    mutationFn: async ({
-      userId,
-      token,
-    }: {
-      userId: string;
-      token: string;
-    }) => {
-      const res = await fetch(`http://localhost:8080/api/users/${userId}`, {
+
+  return useMutation({
+    mutationFn: async ({ userId }: DeleteUserParams) => {
+      const res = await apiFetch(`/api/users/${userId}`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
       });
+
       if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || "Something went wrong");
+        const error = await res.json().catch(() => null);
+        throw new Error(error?.message || "Failed to delete user");
       }
     },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success("User deleted successfully");
     },
-    onError: (error) => {
+
+    onError: (error: any) => {
       toast.error(error.message || "Failed to delete user");
     },
   });
-  return deleteUserMutation;
 };

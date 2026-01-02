@@ -5,20 +5,15 @@ import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { UserTableData } from "../types/user-table-data";
 import { DataTableMenu } from "../components/data-table";
 import { useDeleteUser, useGetUsers } from "@/features/user/api";
-import { useSession } from "next-auth/react";
 
 const columnHelper = createColumnHelper<UserTableData>();
 
 export const useGetUserColumns = () => {
   const { mutate: deleteUser } = useDeleteUser();
-  const { data: sessionData } = useSession();
-  const { data: users } = useGetUsers(sessionData?.accessToken || "");
-  const token = sessionData?.accessToken;
+  const { data: users } = useGetUsers();
 
   const [roleModalOpen, setRoleModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserTableData | null>(null);
-
-  if (!token) throw new Error("Authentication token not found");
 
   const actions = [
     {
@@ -32,7 +27,7 @@ export const useGetUserColumns = () => {
     },
     {
       label: "Delete",
-      onClick: (id: string) => deleteUser({ userId: id, token }),
+      onClick: (id: string) => deleteUser({ userId: id }),
     },
   ];
 

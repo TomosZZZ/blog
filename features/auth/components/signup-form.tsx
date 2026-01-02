@@ -36,7 +36,8 @@ const SignupForm = () => {
   const submitHandler = async (data: SignupDto) => {
     mutate(data, {
       onSuccess: (data) => {
-        setMessage(data.message);
+        console.log(data);
+        setMessage("Account created successfully! You can now log in.");
       },
       onError: (error) => {
         setMessage(error.message);

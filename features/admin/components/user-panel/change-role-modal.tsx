@@ -18,13 +18,14 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
+import { UserRole } from "@/features/user/types/user-role";
 
 type ChangeRoleModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   username: string;
   currentRole: string;
-  onConfirm: (newRole: string) => void;
+  onConfirm: (newRole: UserRole) => void;
   loading?: boolean;
 };
 
@@ -87,7 +88,7 @@ export function ChangeRoleModal({
           </Button>
           <Button
             className="bg-purple-600 hover:bg-purple-700 text-white"
-            onClick={() => onConfirm(selectedRole)}
+            onClick={() => onConfirm(selectedRole as UserRole)}
             disabled={loading || !selectedRole}
           >
             {loading ? "Saving..." : "Save changes"}

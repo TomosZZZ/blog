@@ -1,54 +1,39 @@
+import { apiFetch } from "@/lib/api-fetch";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { UserRole } from "@/features/user/types";
+
+type UpdateUserRoleParams = {
+  userId: string;
+  newRole: UserRole;
+};
 
 export const useUpdateUserRole = () => {
   const queryClient = useQueryClient();
-  const updateUserRoleMutation = useMutation({
-    mutationFn: async ({
-      userId,
-      newRole,
-      token,
-    }: {
-      userId: string;
-      newRole: string;
-      token: string;
-    }) => {
-      const res = await fetch(
-        `http://localhost:8080/api/users/${userId}/role`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ role: newRole }),
-        }
-      );
+
+  return useMutation({
+    mutationFn: async ({ userId, newRole }: UpdateUserRoleParams) => {
+      const res = await apiFetch(`/api/users/${userId}/role`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ role: newRole }),
+      });
+
       if (!res.ok) {
-        let errorMessage = "Something went wrong updating user role";
-
-        try {
-          const data = await res.json();
-          if (data && data.message) {
-            errorMessage = data.message;
-          }
-        } catch (e) {
-          const text = await res.text();
-          if (text) {
-            errorMessage = text;
-          }
-        }
-
-        throw new Error(errorMessage);
+        const error = await res.json().catch(() => null);
+        throw new Error(error?.message || "Failed to update user role");
       }
     },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success("User role updated successfully");
     },
-    onError: (error) => {
-      toast.error(error.message || "Something went wrong updating user role");
+
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to update user role");
     },
   });
-  return updateUserRoleMutation;
 };

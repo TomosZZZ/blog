@@ -4,9 +4,16 @@ import { Loader } from "@/shared/components";
 import { silkscreen } from "@/shared/fonts";
 import { usePostDescriptions } from "../../hooks/usePostDescription";
 import { PostCard } from "./post/post-card";
+import { Post } from "../../types/post";
 
-export const Blog = () => {
-  const { posts, descriptions, isLoading, isError } = usePostDescriptions();
+type BlogProps = {
+  initialPosts: Post[];
+};
+
+export const Blog = ({ initialPosts }: BlogProps) => {
+  const { posts, descriptions, isLoading, isError } = usePostDescriptions({
+    initialPosts: initialPosts,
+  });
 
   return (
     <div className="text-white w-full px-4 sm:px-6 lg:px-8">

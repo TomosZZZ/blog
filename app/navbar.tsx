@@ -15,7 +15,6 @@ const Navbar = () => {
   const isAdmin = session?.user?.role === "ADMIN";
   const isEditor = session?.user?.role === "EDITOR";
   const isAdminOrEditor = isAdmin || isEditor;
-
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -67,7 +66,6 @@ const Navbar = () => {
               </li>
               {isAdmin && (
                 <li>
-                  {" "}
                   <Link
                     className={`text-lg transition-colors hover:text-violet-400 ${
                       pathname.startsWith("/admin")
@@ -82,7 +80,6 @@ const Navbar = () => {
               )}
               {isEditor && (
                 <li>
-                  {" "}
                   <Link
                     className={`text-lg transition-colors hover:text-violet-400 ${
                       pathname.startsWith("/admin")
@@ -177,7 +174,6 @@ const Navbar = () => {
               </li>
               {isAdmin && (
                 <li>
-                  {" "}
                   <Link
                     className={`text-lg transition-colors hover:text-violet-400 ${
                       pathname.startsWith("/admin")
@@ -192,7 +188,6 @@ const Navbar = () => {
               )}
               {isEditor && (
                 <li>
-                  {" "}
                   <Link
                     className={`text-lg transition-colors hover:text-violet-400 ${
                       pathname.startsWith("/admin")

@@ -1,19 +1,20 @@
-import { SignupDto } from "@/features";
 import { NextResponse } from "next/server";
-import { userService } from "@/features/user";
 
 export const POST = async (req: Request) => {
-  try {
-    const data = (await req.json()) as SignupDto;
-    await userService.createUser(data);
-    return NextResponse.json({ message: "User created successfully" });
-  } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json({ message: error.message }, { status: 400 });
-    }
-    return NextResponse.json(
-      { message: "An unknown error occurred" },
-      { status: 500 }
-    );
-  }
+  const body = await req.json();
+
+  const res = await fetch("http://localhost:8080/auth/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  const text = await res.text();
+  const data = text ? JSON.parse(text) : null;
+
+  return NextResponse.json(data, {
+    status: res.status,
+  });
 };

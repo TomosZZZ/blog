@@ -1,5 +1,5 @@
 import { Post } from "@/features";
-import { getPostById, getPosts } from "@/features/blog/api";
+import { getPostById, getPosts, getPostsServer } from "@/features/blog/api";
 
 import { notFound } from "next/navigation";
 import React from "react";
@@ -13,7 +13,7 @@ type PostParams = {
 };
 
 export async function generateStaticParams(): Promise<PostParams[]> {
-  const posts = await getPosts();
+  const posts = await getPostsServer();
 
   return posts.map((post) => ({ slug: post.slug }));
 }

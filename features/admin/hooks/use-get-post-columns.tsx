@@ -4,18 +4,14 @@ import { PostTableData } from "@/features/admin/types/post-table-data";
 import { UUIDCell } from "@/features/admin/components/data-table/cells/uuid-cell";
 import { DataTableMenu } from "@/features/admin/components/data-table/data-table-menu";
 import { useDeletePost } from "@/features/blog/api";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
+import { toast } from "sonner";
 
 const columnHelper = createColumnHelper<PostTableData>();
 
 export const useGetPostColumns = () => {
-  const { data: sessionData } = useSession();
-  const token = sessionData?.accessToken;
-  if (!token) throw new Error("Authentication token not found");
-
   const { mutate: deletePost } = useDeletePost();
 
   const router = useRouter();
@@ -27,7 +23,18 @@ export const useGetPostColumns = () => {
     },
     {
       label: "Delete",
-      onClick: (id: string) => deletePost({ postId: id, token }),
+      onClick: (id: string) =>
+        deletePost(
+          { postId: id },
+          {
+            onError: (err: any) => {
+              toast.error(err.message || "Failed to delete post");
+            },
+            onSuccess: () => {
+              toast.success("Post deleted successfully");
+            },
+          }
+        ),
     },
   ];
 

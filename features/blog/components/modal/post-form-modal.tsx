@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button";
 import { convertImageToBase64 } from "@/app/utils";
 import { FaX } from "react-icons/fa6";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useUpdatePost, useCreatePost } from "@/features/blog/api";
 import { useRouter } from "next/navigation";
@@ -52,8 +51,6 @@ export const PostFormModal = ({
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(
     isEditMode ? postDetails?.thumbnail || null : null
   );
-
-  const { data: sessionData } = useSession();
 
   const router = useRouter();
 
@@ -97,10 +94,6 @@ export const PostFormModal = ({
         thumbnail: finalThumbnail,
         content: editorContent,
       };
-      const token = sessionData?.accessToken;
-      if (!token) {
-        throw new Error("Authentication token not found");
-      }
 
       const mutationOptions = {
         onSuccess: (res: void) => {
@@ -110,22 +103,28 @@ export const PostFormModal = ({
           );
           onCloseModal();
         },
-        onError: (res: Error) => {
-          setError("root", { message: res.message || "An error occurred" });
+        onError: (err: any) => {
+          if (err?.errors) {
+            Object.entries(err.errors).forEach(([field, message]) => {
+              setError(field as any, {
+                message: message as string,
+              });
+            });
+            return;
+          }
+
+          setError("root", {
+            message: err.message || "An error occurred",
+          });
         },
       };
+
       if (isEditMode && postDetails) {
-        updatePost(
-          { postId: postDetails.id, post, token },
-          { ...mutationOptions }
-        );
+        updatePost({ postId: postDetails.id, post }, { ...mutationOptions });
       } else {
-        createPost(
-          { post, token },
-          {
-            ...mutationOptions,
-          }
-        );
+        createPost(post, {
+          ...mutationOptions,
+        });
       }
     } catch (error) {
       if (error instanceof Error) {

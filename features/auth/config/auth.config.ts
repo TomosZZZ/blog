@@ -1,70 +1,71 @@
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "../schemas";
-import { UserRepository } from "@/features/user/repository";
-import bcryptjs from "bcryptjs";
-import { SignJWT } from "jose";
+import { UserRole } from "@/features/user/types";
+
+type AuthUser = {
+  id: string;
+  email: string;
+  accessToken: string;
+  role: UserRole;
+};
+
 export const authConfig = {
   providers: [
     Credentials({
+      name: "Spring Backend",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
-        const { success, data } = loginSchema.safeParse(credentials);
+        const { success, data: parsedCredentials } =
+          loginSchema.safeParse(credentials);
 
-        if (!success || !data) {
+        if (!success || !parsedCredentials) {
           throw new Error("Invalid credentials");
         }
 
-        const { email, password } = data;
-        const userRepository = new UserRepository();
-
-        const user = await userRepository.getUserByEmail(email);
-
-        if (!user || !user.password) {
-          throw new Error("Invalid email");
+        const { email, password } = parsedCredentials;
+        const res = await fetch("http://localhost:8080/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        });
+        if (!res.ok) {
+          return null;
         }
 
-        const passwordsMatch = await bcryptjs.compare(password, user.password);
+        const data = await res.json();
 
-        if (!passwordsMatch) {
-          throw new Error("Invalid password");
-        }
-        return user;
+        return {
+          id: email,
+          email,
+          accessToken: data.accessToken,
+          role: data.role,
+        };
       },
     }),
   ],
   session: {
     strategy: "jwt",
   },
-  secret: process.env.AUTH_SECRET,
 
   callbacks: {
     async session({ session, token }) {
-      const secret = new TextEncoder().encode(process.env.AUTH_SECRET);
-      if (!secret) {
-        throw new Error("Auth secret is not defined");
-      }
-
-      session.accessToken = await new SignJWT(token)
-        .setProtectedHeader({ alg: "HS256" })
-        .setIssuedAt()
-        .setExpirationTime("1h")
-        .sign(secret);
-
-      if (token.role) {
-        session.user.role = token.role;
-      }
-
+      session.accessToken = token.accessToken;
+      session.user.role = token.role;
       return session;
     },
     async jwt({ token, user }) {
-      if (user && user.role) {
-        token.role = user.role;
+      if (user) {
+        const authUser = user as AuthUser;
+        token.accessToken = authUser.accessToken;
+        token.role = authUser.role;
       }
-
       return token;
     },
   },

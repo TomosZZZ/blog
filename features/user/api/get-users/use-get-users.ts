@@ -1,25 +1,21 @@
+import { UserAdminDto } from "@/features/user/types";
 import { useQuery } from "@tanstack/react-query";
-import { User } from "@prisma/client";
+import { apiFetch } from "@/lib/api-fetch";
 
-const getUsers = async (authHeader: string) => {
-  const res = await fetch("http://localhost:8080/api/users", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authHeader,
-    },
-  });
+const getUsers = async (): Promise<UserAdminDto[]> => {
+  const res = await apiFetch("/api/users");
+
   if (!res.ok) {
-    throw new Error("Failed to fetch users");
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.message || "Failed to fetch users");
   }
-  const data = (await res.json()) as User[];
-  return data;
+
+  return res.json();
 };
 
-export const useGetUsers = (token: string) => {
-  const getUsersQuery = useQuery({
+export const useGetUsers = () => {
+  return useQuery({
     queryKey: ["users"],
-    queryFn: () => getUsers(`Bearer ${token}`),
+    queryFn: getUsers,
   });
-  return getUsersQuery;
 };

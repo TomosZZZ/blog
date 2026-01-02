@@ -1,3 +1,6 @@
-import { User } from "@prisma/client";
+import { UserAdminDto } from "@/features/user/types";
 
-export type UserTableData = Pick<User, "id" | "username" | "email" | "role">;
+export type UserTableData = Pick<
+  UserAdminDto,
+  "id" | "username" | "email" | "role"
+>;

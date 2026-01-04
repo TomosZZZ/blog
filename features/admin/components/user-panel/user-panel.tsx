@@ -2,15 +2,28 @@
 
 import { useGetUsers } from "@/features/user/api";
 import { Loader } from "@/shared/components";
-import React from "react";
+import React, { useState } from "react";
 import { DataTable } from "../data-table";
 import { UserTableData } from "../../types/user-table-data";
 import { useGetUserColumns } from "../../hooks/use-get-user-columns";
 import { ChangeRoleModal } from "./change-role-modal";
 import { useUpdateUserRole } from "@/features/user/api/update-user-role/use-update-user-role";
 import { UserRole } from "@/features/user";
+import {
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  ColumnFiltersState,
+} from "@tanstack/react-table";
+import { DataTableFilter } from "../data-table/data-table-filter";
 
 export const UserPanel = () => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
   const {
     data: users,
     isError,
@@ -29,6 +42,24 @@ export const UserPanel = () => {
     role: user.role,
   }));
 
+  const table = useReactTable({
+    data: dataTableUsers ?? [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    state: {
+      sorting,
+      columnFilters,
+    },
+    initialState: {
+      pagination: { pageSize: 6 },
+    },
+  });
+
   if (isLoading) return <Loader />;
   if (isError) return <div>Error loading users</div>;
   if (isUsersSuccess && users.length === 0) return <div>No users found</div>;
@@ -37,11 +68,8 @@ export const UserPanel = () => {
     <div>
       {dataTableUsers && (
         <div>
-          <DataTable<UserTableData>
-            data={dataTableUsers}
-            columns={columns}
-            columnFilter="email"
-          />
+          <DataTableFilter<UserTableData> columnName="email" table={table} />
+          <DataTable<UserTableData> table={table} columns={columns} />
           <ChangeRoleModal
             open={roleModalOpen}
             onOpenChange={setRoleModalOpen}

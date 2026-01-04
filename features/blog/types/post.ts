@@ -1,3 +1,5 @@
+import { PostStatus } from "./post-status";
+
 export interface PostDTO {
   title: string;
   content: string;
@@ -9,7 +11,9 @@ export interface Post {
   title: string;
   content: string;
   thumbnail: string;
+  authorEmail: string;
   slug: string;
+  status: PostStatus;
   createdAt: Date;
   updatedAt: Date;
 }

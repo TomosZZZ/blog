@@ -8,57 +8,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-} from "@tanstack/react-table";
-import React, { useState } from "react";
+import { ColumnDef, flexRender } from "@tanstack/react-table";
+import React from "react";
 import { DataTablePagination } from "./data-table-pagination";
-import { DataTableFilter } from "./data-table-filter";
+import { Table as TanstackTable } from "@tanstack/react-table";
 
 interface DataTableProps<TData extends object> {
-  data: TData[];
+  table: TanstackTable<TData>;
   columns: ColumnDef<TData>[];
-  columnFilter?: string;
 }
-
 export const DataTable = <TData extends object>({
-  data,
+  table,
   columns,
-  columnFilter,
 }: DataTableProps<TData>) => {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    state: {
-      sorting,
-      columnFilters,
-    },
-    initialState: { pagination: { pageSize: 6 } },
-  });
-
   return (
     <>
       <div className="overflow-hidden">
-        {columnFilter && (
-          <DataTableFilter columnName={columnFilter} table={table} />
-        )}
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -81,7 +46,7 @@ export const DataTable = <TData extends object>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow className="hover:bg-transparent " key={row.id}>
+                <TableRow className="hover:bg-transparent" key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(

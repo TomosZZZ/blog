@@ -1,7 +1,7 @@
 import { UserPanel } from "@/features/admin";
 import React from "react";
 
-const UserManagerPage = () => {
+const UsersPage = () => {
   return (
     <div>
       <UserPanel />
@@ -9,4 +9,4 @@ const UserManagerPage = () => {
   );
 };
 
-export default UserManagerPage;
+export default UsersPage;

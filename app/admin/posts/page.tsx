@@ -1,11 +1,11 @@
 import { PostPanel } from "@/features";
 import React from "react";
 
-const PostsManagerPage = () => {
+const AdminPostsPage = () => {
   return (
     <div>
       <PostPanel />
     </div>
   );
 };
-export default PostsManagerPage;
+export default AdminPostsPage;

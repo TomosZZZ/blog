@@ -1,9 +1,9 @@
-import { NewPostEditor } from "@/features/blog/components/new-post/new-post-editor";
+import { PostEditor } from "@/features/admin/components/post-editor/post-editor";
 
 const NewPostPage = () => {
   return (
     <div className="flex items-center justify-center  ">
-      <NewPostEditor />
+      <PostEditor mode="create" />
     </div>
   );
 };

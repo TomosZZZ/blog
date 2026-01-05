@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Backdrop } from "./backdrop";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { createPostFormSchema, updatePostFormSchema } from "../../schemas";
+import { createPostFormSchema, updatePostFormSchema } from "../../../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -28,13 +28,12 @@ interface PostDetails {
   thumbnail: string;
 }
 
-interface CreatePostModalProps {
+interface PostFormModalProps {
   postDetails?: PostDetails;
   editorContent: string;
   modalTitle: string;
   buttonLabel: string;
   onCloseModal: () => void;
-  onSuccess?: () => void;
 }
 
 export const PostFormModal = ({
@@ -43,7 +42,7 @@ export const PostFormModal = ({
   buttonLabel,
   onCloseModal,
   editorContent,
-}: CreatePostModalProps) => {
+}: PostFormModalProps) => {
   const isEditMode = Boolean(postDetails);
   const [fileName, setFileName] = useState<string | null>(
     isEditMode ? "Existing Thumbnail" : null
@@ -95,35 +94,51 @@ export const PostFormModal = ({
         content: editorContent,
       };
 
-      const mutationOptions = {
-        onSuccess: (res: void) => {
-          router.push("/blog");
-          toast.success(
-            `Post ${isEditMode ? "updated" : "created"} successfully`
-          );
-          onCloseModal();
-        },
-        onError: (err: any) => {
-          if (err?.errors) {
-            Object.entries(err.errors).forEach(([field, message]) => {
-              setError(field as any, {
-                message: message as string,
-              });
-            });
-            return;
-          }
-
-          setError("root", {
-            message: err.message || "An error occurred",
-          });
-        },
-      };
-
       if (isEditMode && postDetails) {
-        updatePost({ postId: postDetails.id, post }, { ...mutationOptions });
+        updatePost(
+          { postId: postDetails.id, post },
+          {
+            onSuccess: () => {
+              toast.success("Post updated successfully");
+              onCloseModal();
+            },
+            onError: (err: any) => {
+              if (err?.errors) {
+                Object.entries(err.errors).forEach(([field, message]) => {
+                  setError(field as any, {
+                    message: message as string,
+                  });
+                });
+                return;
+              }
+
+              setError("root", {
+                message: err.message || "An error occurred",
+              });
+            },
+          }
+        );
       } else {
         createPost(post, {
-          ...mutationOptions,
+          onSuccess: (res: { id: string }) => {
+            router.replace(`/admin/posts/${res.id}`);
+            toast.success("Post created successfully");
+            onCloseModal();
+          },
+          onError: (err: any) => {
+            if (err?.errors) {
+              Object.entries(err.errors).forEach(([field, message]) => {
+                setError(field as any, {
+                  message: message as string,
+                });
+              });
+              return;
+            }
+
+            setError("root", {
+              message: err.message || "An error occurred",
+            });
+          },
         });
       }
     } catch (error) {

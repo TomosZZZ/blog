@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { Post } from "../../types/post";
 import { apiFetch } from "@/lib/api-fetch";
+import { PostPanelDto } from "@/features/admin/dto";
 
 const getPostsForPanel = async (scope: string) => {
   const res = await apiFetch(`/api/posts/panel?scope=${scope}`, {
@@ -11,7 +11,7 @@ const getPostsForPanel = async (scope: string) => {
     throw new Error("Something went wrong while fetching posts");
   }
 
-  return res.json() as Promise<Post[]>;
+  return res.json() as Promise<PostPanelDto[]>;
 };
 
 export const useGetPostsForPanel = (scope: string) => {

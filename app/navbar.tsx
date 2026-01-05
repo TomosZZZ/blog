@@ -163,11 +163,11 @@ const Navbar = () => {
                 <Link
                   onClick={() => setIsMenuOpen(false)}
                   className={`text-xl transition-colors hover:text-violet-400 ${
-                    pathname === "/blog/new-post"
+                    pathname === "/admin/posts/new"
                       ? "text-violet-400 font-semibold"
                       : ""
                   }`}
-                  href="/blog/new-post"
+                  href="/admin/posts/new"
                 >
                   Create
                 </Link>
@@ -194,7 +194,7 @@ const Navbar = () => {
                         ? "text-violet-400 font-semibold"
                         : ""
                     }`}
-                    href="/admin/manage-posts"
+                    href="/admin/posts"
                   >
                     Posts
                   </Link>

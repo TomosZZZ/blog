@@ -10,9 +10,7 @@ export default async function middleware(req: NextRequest) {
     pathname.startsWith("/api") ||
     pathname === "/" ||
     pathname === "/blog" ||
-    (pathname.startsWith("/blog") &&
-      !pathname.startsWith("/blog/update-post") &&
-      pathname !== "/blog/new-post") ||
+    pathname.startsWith("/blog") ||
     pathname.startsWith("/auth");
 
   if (isPublic) {

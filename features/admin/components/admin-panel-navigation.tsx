@@ -14,13 +14,13 @@ import { useSession } from "next-auth/react";
 
 const ADMIN_LINKS = [
   {
-    href: "/admin/manage-posts",
+    href: "/admin/posts",
     text: "Posts",
     icon: RiFileListLine,
     role: ["EDITOR", "ADMIN"],
   },
   {
-    href: "/admin/manage-users",
+    href: "/admin/users",
     text: "Users",
     icon: RiUserLine,
     role: ["ADMIN"],

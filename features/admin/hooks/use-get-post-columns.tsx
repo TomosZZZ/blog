@@ -19,7 +19,7 @@ export const useGetPostColumns = () => {
     () => [
       {
         label: "Edit",
-        onClick: (id: string) => router.push(`/blog/update-post/${id}`),
+        onClick: (id: string) => router.push(`/admin/posts/${id}`),
       },
       {
         label: "Delete",

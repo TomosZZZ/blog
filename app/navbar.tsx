@@ -55,11 +55,11 @@ const Navbar = () => {
               <li>
                 <Link
                   className={`text-lg transition-colors hover:text-violet-400 ${
-                    pathname === "/blog/new-post"
+                    pathname === "/admin/posts/new"
                       ? "text-violet-400 font-semibold"
                       : ""
                   }`}
-                  href="/blog/new-post"
+                  href="/admin/posts/new"
                 >
                   Create
                 </Link>
@@ -86,7 +86,7 @@ const Navbar = () => {
                         ? "text-violet-400 font-semibold"
                         : ""
                     }`}
-                    href="/admin/manage-posts"
+                    href="/admin/posts"
                   >
                     Posts
                   </Link>

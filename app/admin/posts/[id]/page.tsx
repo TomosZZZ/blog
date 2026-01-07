@@ -23,6 +23,7 @@ const UpdatePostPage = async ({ params }: UpdatePostPageProps) => {
           id: post.id,
           title: post.title,
           thumbnail: post.thumbnail,
+          status: post.status,
         }}
       />
     </div>

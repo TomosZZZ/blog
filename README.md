@@ -114,7 +114,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - [ ] Search functionality
 - [ ] Email notifications on status change
 - [ ] Image upload support
-- [ ] Dark mode
+- [ ] Light mode
 
 ---
 

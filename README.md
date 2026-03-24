@@ -33,6 +33,24 @@
 
 ---
 
+## Gallery
+
+# Home page
+<img width="2879" height="1477" alt="Zrzut ekranu 2026-03-24 124508" src="https://github.com/user-attachments/assets/c2a0051e-deee-4f9b-ab99-bfbec76d9ded" />
+
+# Posts page
+<img width="2879" height="1426" alt="Zrzut ekranu 2026-03-24 124456" src="https://github.com/user-attachments/assets/affedd10-eeac-42c8-8dd9-33d8642f914c" />
+
+# Post creation page
+<img width="2879" height="1409" alt="Zrzut ekranu 2026-03-24 122954" src="https://github.com/user-attachments/assets/3b19ebb5-06a7-4fc4-a958-83361d046aee" />
+
+# Post edition page
+<img width="2879" height="1403" alt="Zrzut ekranu 2026-03-24 124752" src="https://github.com/user-attachments/assets/0dc60ee7-7751-4cab-92c5-14ed7da3b81a" />
+
+# Admin posts management page
+<img width="2877" height="1169" alt="Zrzut ekranu 2026-03-24 124537" src="https://github.com/user-attachments/assets/33984d5c-827a-47dd-931c-301cc8cad4ea" />
+
+
 ## 🚀 Getting Started
 
 ### Prerequisites

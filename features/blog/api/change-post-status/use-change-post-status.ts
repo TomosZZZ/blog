@@ -5,17 +5,18 @@ import { apiFetch } from "@/lib/api-fetch";
 interface ChangePostStatusDto {
   status: PostStatus;
   postId: string;
+  comment?: string;
 }
 
 export const useChangePostStatus = () => {
   return useMutation({
-    mutationFn: async ({ status, postId }: ChangePostStatusDto) => {
+    mutationFn: async ({ status, postId, comment }: ChangePostStatusDto) => {
       const res = await apiFetch(`/api/posts/${postId}/status`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status, comment: null }),
+        body: JSON.stringify({ status, comment: comment ?? null }),
       });
 
       if (!res.ok) {

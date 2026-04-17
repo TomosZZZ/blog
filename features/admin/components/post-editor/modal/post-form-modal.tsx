@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Backdrop } from "./backdrop";
+import { Backdrop } from "../../../../../shared/components/backdrop";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { createPostFormSchema, updatePostFormSchema } from "../../../schemas";

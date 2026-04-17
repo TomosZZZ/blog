@@ -29,7 +29,9 @@ export const PostPanel = () => {
   const isAdmin = session?.user?.role === "ADMIN";
 
   const { data: posts, isLoading, isError } = useGetPostsForPanel(scope);
-  const columns = useGetPostColumns();
+  const columns = useGetPostColumns(
+    isAdmin ? { role: "ADMIN" } : { role: "EDITOR" }
+  );
 
   const dataTablePosts = useMemo<PostTableData[]>(() => {
     if (!posts) return [];

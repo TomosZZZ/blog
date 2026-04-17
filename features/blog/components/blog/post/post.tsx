@@ -1,12 +1,10 @@
 "use client";
 
 import { useGetPostById } from "@/features/blog/api";
-import { EditorContent, useEditor } from "@tiptap/react";
-import React, { useEffect, useMemo } from "react";
-import { RichTextEditorExtensions } from "../../text-editor";
 import { default as NextImage } from "next/image";
 import { PostSkeleton } from "./post-skeleton";
 import { Post as PostModel } from "@/features/blog/types/post";
+import { PostContentRenderer } from "@/shared/components/post/post-content-renderer";
 
 type Props = {
   initialData: PostModel;
@@ -20,45 +18,11 @@ export const Post = ({ initialData }: Props) => {
 
   const post = data || initialData;
 
-  const parsedContent = useMemo(() => {
-    if (post?.content) {
-      try {
-        return JSON.parse(post.content);
-      } catch (e) {
-        console.error("Failed to parse editor content:", e);
-        return "";
-      }
-    }
-    return "";
-  }, [post?.content]);
-
-  const editor = useEditor({
-    extensions: RichTextEditorExtensions,
-    content: parsedContent,
-    editable: false,
-  });
-
-  useEffect(() => {
-    if (!editor || !parsedContent) {
-      return;
-    }
-
-    try {
-      const currentContent = editor.getJSON();
-
-      if (JSON.stringify(currentContent) !== JSON.stringify(parsedContent)) {
-        editor.commands.setContent(parsedContent, false);
-      }
-    } catch (e) {
-      console.error("Failed to parse or set editor content:", e);
-    }
-  }, [parsedContent, editor]);
-
   if (isLoading || !post) {
     return <PostSkeleton />;
   }
 
-  if (isError || !post) {
+  if (isError) {
     return (
       <div className="text-red-500 text-center py-20">
         <h2>Something went wrong!</h2>
@@ -87,9 +51,7 @@ export const Post = ({ initialData }: Props) => {
           </div>
         </div>
 
-        <div className="prose prose-lg prose-invert max-w-none py-5">
-          <EditorContent editor={editor} />
-        </div>
+        <PostContentRenderer content={post.content} />
       </div>
     </article>
   );

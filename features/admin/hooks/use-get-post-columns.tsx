@@ -8,10 +8,15 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { toast } from "sonner";
 import { useMemo } from "react";
+import { buildPostActions } from "../util/buildPostActions";
 
 const columnHelper = createColumnHelper<PostTableData>();
 
-export const useGetPostColumns = () => {
+interface useGetPostColumnsProps {
+  role: "EDITOR" | "ADMIN";
+}
+
+export const useGetPostColumns = ({ role }: useGetPostColumnsProps) => {
   const { mutate: deletePost } = useDeletePost();
   const router = useRouter();
 
@@ -75,11 +80,53 @@ export const useGetPostColumns = () => {
 
       columnHelper.display({
         id: "actions",
-        cell: (info) => (
-          <div className="flex justify-end">
-            <DataTableMenu actions={actions} id={info.row.original.id} />
-          </div>
-        ),
+        cell: (info) => {
+          const post = info.row.original;
+
+          const actionKeys = buildPostActions({
+            role,
+            status: post.status,
+          });
+
+          const actions = [];
+
+          if (actionKeys.includes("EDIT")) {
+            actions.push({
+              label: "Edit",
+              onClick: () => router.push(`/admin/posts/${post.id}`),
+            });
+          }
+
+          if (actionKeys.includes("DELETE")) {
+            actions.push({
+              label: "Delete",
+              onClick: () =>
+                deletePost(
+                  { postId: post.id },
+                  {
+                    onError: (err: any) =>
+                      toast.error(err.message || "Failed to delete post"),
+                    onSuccess: () => toast.success("Post deleted successfully"),
+                  }
+                ),
+            });
+          }
+
+          if (actionKeys.includes("REVIEW")) {
+            actions.push({
+              label: "Review",
+              onClick: () => router.push(`/admin/posts/${post.id}/review`),
+            });
+          }
+
+          if (actionKeys.length === 0) return null;
+
+          return (
+            <div className="flex justify-end">
+              <DataTableMenu actions={actions} />
+            </div>
+          );
+        },
       }),
     ],
     [actions]

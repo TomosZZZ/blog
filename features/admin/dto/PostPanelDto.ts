@@ -9,4 +9,5 @@ export type PostPanelDto = {
   createdAt: Date;
   status: PostStatus;
   reviewComment: string | null;
+  reviewerEmail: string | null;
 };

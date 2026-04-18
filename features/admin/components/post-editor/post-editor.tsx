@@ -44,7 +44,8 @@ export const PostEditor = ({
 
   const canSendToReview =
     mode === "edit" &&
-    postDetails?.status === PostStatus.DRAFT &&
+    (postDetails?.status === PostStatus.DRAFT ||
+      postDetails?.status === PostStatus.CHANGES_REQ) &&
     (session?.user?.role === "EDITOR" || session?.user?.role === "ADMIN");
 
   const isAllowed =
@@ -59,7 +60,7 @@ export const PostEditor = ({
   };
 
   const handleSendToReview = (status: PostStatus) => {
-    if (!postDetails?.id || postDetails.status !== PostStatus.DRAFT) return;
+    if (!postDetails?.id || (postDetails.status !== PostStatus.DRAFT && postDetails.status !== PostStatus.CHANGES_REQ)) return;
     changePostStatus(
       { postId: postDetails.id, status },
       {

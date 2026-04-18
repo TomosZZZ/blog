@@ -8,6 +8,7 @@ import { PostContentRenderer } from "@/shared/components";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
+import { RejectPostModal } from "./reject-post-modal";
 
 interface ReviewPostProps {
   post: Post;
@@ -21,17 +22,30 @@ export const ReviewPost = ({ post }: ReviewPostProps) => {
 
   const approveHandler = () => {
     changePostStatus(
-      {
-        postId: post.id,
-        status: PostStatus.APPROVED,
-      },
+      { postId: post.id, status: PostStatus.APPROVED },
       {
         onSuccess: () => {
           toast.success("Post approved successfully");
           router.replace("/admin/posts");
         },
-        onError: (error) => {
-          toast.error(`Something went wrong`);
+        onError: () => {
+          toast.error("Something went wrong");
+        },
+      }
+    );
+  };
+
+  const rejectHandler = (comment: string) => {
+    changePostStatus(
+      { postId: post.id, status: PostStatus.CHANGES_REQ, comment },
+      {
+        onSuccess: () => {
+          toast.success("Post rejected with feedback");
+          setShowRejectModal(false);
+          router.replace("/admin/posts");
+        },
+        onError: () => {
+          toast.error("Something went wrong");
         },
       }
     );
@@ -39,6 +53,12 @@ export const ReviewPost = ({ post }: ReviewPostProps) => {
 
   return (
     <div>
+      <RejectPostModal
+        isOpen={showRejectModal}
+        onClose={() => setShowRejectModal(false)}
+        onConfirm={rejectHandler}
+        isLoading={isPending}
+      />
       <div>
         <h1 className="text-3xl font-bold mb-4 text-center">{post.title}</h1>
         <div className="flex flex-row justify-between mb-6">
@@ -51,14 +71,17 @@ export const ReviewPost = ({ post }: ReviewPostProps) => {
         <div className="flex gap-5 mt-10 justify-end">
           <Button
             onClick={approveHandler}
+            disabled={isPending}
             variant="ghost"
             className="px-8 border border-violet-700 hover:border-violet-900 hover:bg-violet-800 hover:text-white"
           >
             Approve
           </Button>
           <Button
+            onClick={() => setShowRejectModal(true)}
+            disabled={isPending}
             variant="ghost"
-            className="px-8 border border-violet-700 hover:border-violet-900 hover:bg-violet-800 hover:text-white"
+            className="px-8 border border-red-700 hover:border-red-900 hover:bg-red-800 hover:text-white"
           >
             Reject
           </Button>

@@ -50,7 +50,10 @@ export function ChangeRoleModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md bg-neutral-900 border border-neutral-700 shadow-xl shadow-purple-600/10 text-neutral-100">
+      <DialogContent
+        className="sm:max-w-md bg-neutral-900 border border-neutral-700 shadow-xl shadow-purple-600/10 text-neutral-100"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle className="text-neutral-100">Change Role</DialogTitle>
           <DialogDescription className="text-neutral-400">

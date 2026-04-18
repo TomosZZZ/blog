@@ -13,14 +13,12 @@ export const usePostDescriptions = ({
   initialPosts = [],
 }: UsePostDescriptionProps) => {
   const {
-    data = initialPosts,
+    data,
     isLoading: isPostsLoading,
     isError,
   } = useGetPosts();
   const [descriptions, setDescriptions] = useState<string[]>([]);
-  const [isDescriptionsLoading, setIsDescriptionsLoading] = useState(
-    initialPosts.length > 0
-  );
+  const [isDescriptionsLoading, setIsDescriptionsLoading] = useState(false);
 
   useEffect(() => {
     if (!data) return;
@@ -31,7 +29,7 @@ export const usePostDescriptions = ({
       try {
         const contentJson = JSON.parse(post.content);
         return extractTextFromTipTapJSON(contentJson);
-      } catch (error) {
+      } catch {
         return "";
       }
     });
@@ -41,7 +39,7 @@ export const usePostDescriptions = ({
   }, [data]);
 
   return {
-    posts: data,
+    posts: data ?? initialPosts,
     descriptions,
     isLoading: isPostsLoading || isDescriptionsLoading,
     isError,

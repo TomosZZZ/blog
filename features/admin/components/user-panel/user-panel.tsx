@@ -2,7 +2,7 @@
 
 import { useGetUsers } from "@/features/user/api";
 import { Loader } from "@/shared/components";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { DataTable } from "../data-table";
 import { UserTableData } from "../../types/user-table-data";
 import { useGetUserColumns } from "../../hooks/use-get-user-columns";
@@ -31,16 +31,20 @@ export const UserPanel = () => {
     isSuccess: isUsersSuccess,
   } = useGetUsers();
   const { columns, roleModalOpen, setRoleModalOpen, selectedUser } =
-    useGetUserColumns();
+    useGetUserColumns(users);
 
-  const { mutate: updateUserRole, isPending, isSuccess } = useUpdateUserRole();
+  const { mutate: updateUserRole, isPending } = useUpdateUserRole();
 
-  const dataTableUsers = users?.map((user) => ({
-    id: user.id,
-    username: user.username,
-    email: user.email,
-    role: user.role,
-  }));
+  const dataTableUsers = useMemo(
+    () =>
+      users?.map((user) => ({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      })) ?? [],
+    [users]
+  );
 
   const table = useReactTable({
     data: dataTableUsers ?? [],
@@ -78,15 +82,10 @@ export const UserPanel = () => {
             loading={isPending}
             onConfirm={(newRole: UserRole) => {
               if (!selectedUser) return;
-              updateUserRole({
-                userId: selectedUser.id,
-                newRole,
-              });
-              if (isSuccess) {
-                setRoleModalOpen(false);
-              } else {
-                setRoleModalOpen(false);
-              }
+              updateUserRole(
+                { userId: selectedUser.id, newRole },
+                { onSuccess: () => setRoleModalOpen(false) }
+              );
             }}
           />
         </div>

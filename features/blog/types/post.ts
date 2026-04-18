@@ -14,6 +14,7 @@ export interface Post {
   authorEmail: string;
   slug: string;
   status: PostStatus;
+  reviewComment?: string;
   createdAt: Date;
   updatedAt: Date;
 }

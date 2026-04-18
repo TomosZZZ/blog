@@ -18,6 +18,7 @@ interface PostEditorProps {
     title: string;
     thumbnail: string;
     status: PostStatus;
+    reviewComment?: string;
   };
   initialContent?: string;
 }
@@ -75,6 +76,12 @@ export const PostEditor = ({
 
   return (
     <div className="w-3/4 mt-5 text-white">
+      {postDetails?.status === PostStatus.CHANGES_REQ && postDetails.reviewComment && (
+        <div className="mb-6 rounded-lg border border-yellow-600 bg-yellow-950/40 p-4">
+          <p className="text-sm font-semibold text-yellow-400 mb-1">⚠ Reviewer feedback</p>
+          <p className="text-sm text-yellow-200">{postDetails.reviewComment}</p>
+        </div>
+      )}
       {showModal && (
         <PostFormModal
           modalTitle={mode === "create" ? "Create post" : "Update post"}

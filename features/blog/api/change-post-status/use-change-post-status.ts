@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PostStatus } from "../../types/post-status";
 import { apiFetch } from "@/lib/api-fetch";
 
@@ -9,6 +9,8 @@ interface ChangePostStatusDto {
 }
 
 export const useChangePostStatus = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async ({ status, postId, comment }: ChangePostStatusDto) => {
       const res = await apiFetch(`/api/posts/${postId}/status`, {
@@ -25,6 +27,9 @@ export const useChangePostStatus = () => {
       }
 
       return res;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["panel-posts"] });
     },
   });
 };

@@ -2,7 +2,8 @@ import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { PostTableData } from "@/features/admin/types/post-table-data";
 
 import { DataTableMenu } from "@/features/admin/components/data-table/data-table-menu";
-import { useDeletePost } from "@/features/blog/api";
+import { useChangePostStatus, useDeletePost } from "@/features/blog/api";
+import { PostStatus } from "@/features/blog/types/post-status";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
@@ -18,6 +19,7 @@ interface useGetPostColumnsProps {
 
 export const useGetPostColumns = ({ role }: useGetPostColumnsProps) => {
   const { mutate: deletePost } = useDeletePost();
+  const { mutate: changePostStatus } = useChangePostStatus();
   const router = useRouter();
 
   const actions = useMemo(
@@ -112,10 +114,32 @@ export const useGetPostColumns = ({ role }: useGetPostColumnsProps) => {
             });
           }
 
+          if (actionKeys.includes("VIEW")) {
+            actions.push({
+              label: "View",
+              onClick: () => router.push(`/admin/posts/${post.id}/review`),
+            });
+          }
+
           if (actionKeys.includes("REVIEW")) {
             actions.push({
               label: "Review",
               onClick: () => router.push(`/admin/posts/${post.id}/review`),
+            });
+          }
+
+          if (actionKeys.includes("PUBLISH")) {
+            actions.push({
+              label: "Publish",
+              onClick: () =>
+                changePostStatus(
+                  { postId: post.id, status: PostStatus.PUBLISHED },
+                  {
+                    onSuccess: () => toast.success("Post published successfully"),
+                    onError: (err: any) =>
+                      toast.error(err.message || "Failed to publish post"),
+                  }
+                ),
             });
           }
 
